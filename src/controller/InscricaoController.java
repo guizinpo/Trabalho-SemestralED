@@ -3,102 +3,81 @@ package controller;
 import model.Inscricao;
 import util.arquivoUtil;
 import java.io.IOException;
-import java.util.*;
+import br.edu.fateczl.listaSimples.Lista;
 
 public class InscricaoController {
 
-    private final String caminhoInscricoes = "inscricoes.csv";
-    
-    private LinkedList<Inscricao> inscricoes;
+    private static final String CAMINHO = "resources/inscricoes.csv";
 
-    public InscricaoController() {
-        this.inscricoes = new LinkedList<>();
-        carregarInscricoes();
+    // 🔹 Cria uma nova inscrição e grava no CSV
+    public void inserir(Inscricao inscricao) throws IOException {
+        String linha = inscricao.toString();
+        arquivoUtil.adicionarLinha(CAMINHO, linha);
     }
 
-    private void carregarInscricoes() {
-        try {
-            List<String> linhas = arquivoUtil.lerArquivo(caminhoInscricoes);
-            inscricoes.clear();
-            for (String linha : linhas) {
-                String[] partes = linha.split(";");
-                if (partes.length == 3) {
-                    inscricoes.add(new Inscricao(partes[0], partes[1], partes[2]));
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao carregar inscrições: " + e.getMessage());
-        }
-    }
+    // 🔹 Lê todas as inscrições do CSV e retorna uma lista de objetos
+    public Lista<Inscricao> listar() throws IOException {
+        Lista<String> linhas = arquivoUtil.lerArquivo(CAMINHO);
+        Lista<Inscricao> inscricoes = new Lista<>();
 
-    private void salvarInscricoes() {
-        List<String> linhas = new ArrayList<>();
-        for (Inscricao i : inscricoes) {
-            linhas.add(i.toString());
-        }
-        try {
-            arquivoUtil.gravarArquivo(caminhoInscricoes, linhas);
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar inscrições: " + e.getMessage());
-        }
-    }
-
-    public void adicionarInscricao(Inscricao inscricao) {
-        inscricoes.add(inscricao);
-        salvarInscricoes();
-    }
-
-    public boolean removerInscricao(String cpfProfessor, String idDisciplina) {
-        Iterator<Inscricao> it = inscricoes.iterator();
-        boolean removido = false;
-        while (it.hasNext()) {
-            Inscricao i = it.next();
-            if (i.getCpfProfessor().equals(cpfProfessor) && i.getIdDisciplina().equals(idDisciplina)) {
-                it.remove();
-                removido = true;
+        for (int i = 0; i < linhas.size(); i++) {
+            String linha = linhas.get(i);
+            if (linha != null && !linha.isEmpty()) {
+                String[] dados = linha.split(";");
+                Inscricao ins = new Inscricao();
+                ins.setCpfProfessor(dados[0]);
+                ins.setIdDisciplina(dados[1]);
+                ins.setCodigoProcesso(dados[2]);
+                inscricoes.add(ins, i);
             }
         }
-        if (removido) {
-            salvarInscricoes();
-        }
-        return removido;
+        return inscricoes;
     }
 
-    public List<Inscricao> consultarPorDisciplina(String idDisciplina, Map<String, Integer> pontuacoes) {
-        List<Inscricao> resultado = new ArrayList<>();
-        for (Inscricao i : inscricoes) {
-            if (i.getIdDisciplina().equals(idDisciplina)) {
-                resultado.add(i);
+    // 🔹 Remove uma inscrição com base no CPF e código do processo
+    public void remover(String cpfProfessor, String codigoProcesso) throws IOException {
+        Lista<Inscricao> inscricoes = listar();
+        Lista<String> novasLinhas = new Lista<>();
+
+        for (int i = 0; i < inscricoes.size(); i++) {
+            Inscricao ins = inscricoes.get(i);
+            if (!ins.getCpfProfessor().equals(cpfProfessor) ||
+                !ins.getCodigoProcesso().equals(codigoProcesso)) {
+                novasLinhas.add(ins.toString(), 0);
             }
         }
-        quickSort(resultado, pontuacoes, 0, resultado.size() - 1);
+
+        arquivoUtil.gravarArquivo(CAMINHO, novasLinhas);
+    }
+
+    // 🔹 Atualiza o processo de uma inscrição
+    public void atualizar(String cpfProfessor, String novoCodigo) throws IOException {
+        Lista<Inscricao> inscricoes = listar();
+        Lista<String> novasLinhas = new Lista<>();
+
+        for (int i = 0; i < inscricoes.size(); i++) {
+            Inscricao ins = inscricoes.get(i);
+            if (ins.getCpfProfessor().equals(cpfProfessor)) {
+                ins.setCodigoProcesso(novoCodigo);
+            }
+            novasLinhas.add(ins.toString(), 0);
+        }
+
+        arquivoUtil.gravarArquivo(CAMINHO, novasLinhas);
+    }
+
+    // 🔹 Consulta inscrições de um professor específico
+    public Lista<Inscricao> buscarPorProfessor(String cpfProfessor) throws IOException {
+        Lista<Inscricao> inscricoes = listar();
+        Lista<Inscricao> resultado = new Lista<>();
+
+        for (int i = 0; i < inscricoes.size(); i++) {
+            Inscricao ins = inscricoes.get(i);
+            if (ins.getCpfProfessor().equals(cpfProfessor)) {
+                resultado.add(ins, 0);
+            }
+        }
+
         return resultado;
-    }
-
-    private void quickSort(List<Inscricao> lista, Map<String, Integer> pontuacoes, int low, int high) {
-        if (low < high) {
-            int pi = partition(lista, pontuacoes, low, high);
-            quickSort(lista, pontuacoes, low, pi - 1);
-            quickSort(lista, pontuacoes, pi + 1, high);
-        }
-    }
-
-    private int partition(List<Inscricao> lista, Map<String, Integer> pontuacoes, int low, int high) {
-        Inscricao pivot = lista.get(high);
-        int pivotValue = pontuacoes.getOrDefault(pivot.getCpfProfessor(), 0);
-        int i = low - 1;
-        for (int j = low; j < high; j++) {
-            int valorJ = pontuacoes.getOrDefault(lista.get(j).getCpfProfessor(), 0);
-            if (valorJ >= pivotValue) { // ordem decrescente
-                i++;
-                Collections.swap(lista, i, j);
-            }
-        }
-        Collections.swap(lista, i + 1, high);
-        return i + 1;
-    }
-
-    public List<Inscricao> consultarTodas() {
-        return new ArrayList<>(inscricoes);
     }
 }
