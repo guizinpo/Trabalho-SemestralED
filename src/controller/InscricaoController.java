@@ -8,13 +8,11 @@ public class InscricaoController {
 
     private static final String CAMINHO = "resources/inscricoes.csv";
 
-    // 🔹 Cria uma nova inscrição e grava no CSV
     public void inserir(Inscricao inscricao) throws Exception {
         String linha = inscricao.toString();
         arquivoUtil.adicionarLinha(CAMINHO, linha);
     }
 
-    // 🔹 Lê todas as inscrições do CSV e retorna uma lista de objetos
     public Lista<Inscricao> listar() throws Exception {
         Lista<String> linhas = arquivoUtil.lerArquivo(CAMINHO);
         Lista<Inscricao> inscricoes = new Lista<>();
@@ -33,7 +31,6 @@ public class InscricaoController {
         return inscricoes;
     }
 
-    // 🔹 Remove uma inscrição com base no CPF e código do processo
     public void remover(String cpfProfessor, String codigoProcesso) throws Exception {
         Lista<Inscricao> inscricoes = listar();
         Lista<String> novasLinhas = new Lista<>();
@@ -49,7 +46,6 @@ public class InscricaoController {
         arquivoUtil.gravarArquivo(CAMINHO, novasLinhas);
     }
 
-    // 🔹 Atualiza o processo de uma inscrição
     public void atualizar(String cpfProfessor, String novoCodigo) throws Exception {
         Lista<Inscricao> inscricoes = listar();
         Lista<String> novasLinhas = new Lista<>();
@@ -65,7 +61,6 @@ public class InscricaoController {
         arquivoUtil.gravarArquivo(CAMINHO, novasLinhas);
     }
 
-    // 🔹 Consulta inscrições de um professor específico
     public Lista<Inscricao> buscarPorProfessor(String cpfProfessor) throws Exception {
         Lista<Inscricao> inscricoes = listar();
         Lista<Inscricao> resultado = new Lista<>();
@@ -76,7 +71,6 @@ public class InscricaoController {
                 resultado.add(ins, 0);
             }
         }
-
         return resultado;
     }
 }
