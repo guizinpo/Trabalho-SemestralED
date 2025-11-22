@@ -50,11 +50,18 @@ public class TelaInicial extends JFrame {
 		tabTelaInicial.add(btnDisciplinas);
 
 		btnCursos.addActionListener(e -> irCurso());
+		btnInscricoes.addActionListener(e -> irInscricao());
 		
 	}
 	
 	private void irCurso() {
 	    TelaCurso tela = new TelaCurso();
+	    tela.setVisible(true);
+	    dispose();
+	}
+	
+	private void irInscricao() {
+	    TelaInscricao tela = new TelaInscricao();
 	    tela.setVisible(true);
 	    dispose();
 	}
