@@ -269,14 +269,14 @@ public class DisciplinaController implements ActionListener{
 		
 		if(cmd.equals("Cadastrar")) {
 			try {
-				adicionarDisciplina();;
+				adicionarDisciplina();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			} 
 		}
 		if(cmd.equals("Atualizar")) {
 			try {
-				atualizarDisciplina();;
+				atualizarDisciplina();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
