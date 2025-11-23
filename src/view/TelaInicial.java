@@ -70,6 +70,9 @@ public class TelaInicial extends JFrame {
 	
 	private void irProfessores() {
 		TelaProfessor tela = new TelaProfessor();
+		tela.setVisible(true);
+	    dispose();
+	}
 
 	private void irDisciplina() {
 	    TelaDisciplina tela = new TelaDisciplina();

@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -35,6 +36,10 @@ public class InscricaoController implements ActionListener {
     private JTextArea taDeletar;
 
     private ProfessorController professorController = new ProfessorController();
+    
+    public InscricaoController() {
+    	super();
+    }
 
     public InscricaoController(
             JTextField tfCpfCadastrar,
@@ -211,8 +216,29 @@ public class InscricaoController implements ActionListener {
         if (removido) taDeletar.setText("Inscrição removida com sucesso!");
         else taDeletar.setText("Inscrição não encontrada.");
     }
+    
+    public void remover(String cpf, String processo) throws Exception {
+        Lista<Inscricao> todas = listar();
+        Lista<String> novasLinhas = new Lista<>();
 
-    private Lista<Inscricao> listar() throws Exception {
+        boolean removido = false;
+
+        for (int i = 0; i < todas.size(); i++) {
+            Inscricao ins = todas.get(i);
+
+            if (ins.getCpfProfessor().equals(cpf) &&
+                ins.getCodigoProcesso().equals(processo)) {
+                removido = true;
+            } else {
+                novasLinhas.add(ins.toString(), novasLinhas.size());
+            }
+        }
+
+        arquivoUtil.gravarArquivo(CAMINHO, novasLinhas);
+    }
+
+
+    Lista<Inscricao> listar() throws Exception{
         Lista<String> linhas = arquivoUtil.lerArquivo(CAMINHO);
         Lista<Inscricao> lista = new Lista<>();
 
