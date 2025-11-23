@@ -171,7 +171,7 @@ public class DisciplinaController implements ActionListener{
     			}
     		}
     	}
-    	
+    
     }
 
     public void atualizarDisciplina() throws Exception{
