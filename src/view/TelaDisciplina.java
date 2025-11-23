@@ -16,7 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class TelaDisciplina extends JFrame {
-//tfCadastrarNome, tfCadastrarID, tfCadastrarIdCurso, tfCadastroDiaSemana, tfCadastrarHoraInicial, tfCadastrarHorasDiarias, tfAtualizarId, tfNovoNome, tfNovoIdCurso, tfNovoDiaSemana, tfNovoHoraInicial, tfNovoHorasDiarias, tfDeletarId, tfBuscar, tableConsultar
+
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField tfCadastrarNome;
@@ -341,7 +341,9 @@ public class TelaDisciplina extends JFrame {
 		tabDeleteDisciplina.add(taResultadoDeletar);
 		
 		
-		
+		/*
+		 * Ações
+		 */
 		DisciplinaController dc = new DisciplinaController(tfCadastrarNome, tfCadastrarID, tfCadastrarIdCurso, tfCadastroDiaSemana,
 				tfCadastrarHoraInicial, tfCadastrarHorasDiarias, taResultadoCadastrar, tfAtualizarId, tfNovoNome, tfNovoIdCurso, tfNovoDiaSemana,
 				tfNovoHoraInicial, tfNovoHorasDiarias, taResultadoAtualizar, tfDeletarId,taResultadoDeletar, tfBuscar, tableConsultar);

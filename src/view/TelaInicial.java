@@ -15,14 +15,14 @@ public class TelaInicial extends JFrame {
 	public TelaInicial() {
 		setTitle("Tela Inicial");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 640, 480);
+		setBounds(100, 100, 640, 520);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(24, 0, 604, 431);
+		tabbedPane.setBounds(24, 0, 604, 471);
 		contentPane.add(tabbedPane);
 		
 		JPanel tabTelaInicial = new JPanel();
@@ -48,12 +48,17 @@ public class TelaInicial extends JFrame {
 		btnDisciplinas.setFont(new Font("Dialog", Font.BOLD, 20));
 		btnDisciplinas.setBounds(172, 199, 238, 66);
 		tabTelaInicial.add(btnDisciplinas);
+		
+		JButton btnProcessos = new JButton("Processos");
+		btnProcessos.setFont(new Font("Dialog", Font.BOLD, 20));
+		btnProcessos.setBounds(172, 355, 238, 66);
+		tabTelaInicial.add(btnProcessos);
 
 		btnCursos.addActionListener(e -> irCurso());
 		btnInscricoes.addActionListener(e -> irInscricao());
 		btnProfessores.addActionListener(e -> irProfessores());
 		btnDisciplinas.addActionListener(e -> irDisciplina());
-		
+		btnProcessos.addActionListener(e -> irProcesso());
 	}
 	
 	private void irCurso() {
@@ -78,5 +83,11 @@ public class TelaInicial extends JFrame {
 	    TelaDisciplina tela = new TelaDisciplina();
 	    tela.setVisible(true);
 	    dispose();
+	}
+	
+	private void irProcesso() {
+		TelaProcesso tela = new TelaProcesso();
+		tela.setVisible(true);
+		dispose();
 	}
 }
