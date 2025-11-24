@@ -1,4 +1,4 @@
-Guilherme Teixeira Rodrigues
-Lucas Oliveira Gusmão Florencio dos Santos
-Gabriel de Souza Ordonho
+Guilherme Teixeira Rodrigues<br>
+Lucas Oliveira Gusmão Florencio dos Santos<br>
+Gabriel de Souza Ordonho<br>
 Margareth Yoshimaro Mercer Sasaki
