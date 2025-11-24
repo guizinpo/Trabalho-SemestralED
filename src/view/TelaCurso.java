@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JTable;
 
@@ -22,11 +23,12 @@ public class TelaCurso extends JFrame {
 	private JTextField tfCadastrarNome;
 	private JTextField tfCadastrarID;
 	private JTextField tfCadastrarArea;
-	private JTextField tfNomeDesejavel;
+	private JComboBox<String> cbNomeDesejavel;
 	private JTextField tfNovoNome;
 	private JTextField tfNovaArea;
-	private JTextField tfNomeDesejavel2;
-	private JTextField tfBuscar;
+	private JComboBox<String> cbNomeDesejavel2;
+	private JComboBox<String> cbBuscar;
+	
 	private JTable tableConsultar;
 
 	public TelaCurso() {
@@ -102,11 +104,10 @@ public class TelaCurso extends JFrame {
 		lblNomeDesejavel.setBounds(26, 53, 311, 28);
 		tabAtualizarCurso.add(lblNomeDesejavel);
 		
-		tfNomeDesejavel = new JTextField();
-		tfNomeDesejavel.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfNomeDesejavel.setBounds(26, 80, 264, 28);
-		tabAtualizarCurso.add(tfNomeDesejavel);
-		tfNomeDesejavel.setColumns(10);
+		cbNomeDesejavel = new JComboBox<>();
+		cbNomeDesejavel.setBounds(26, 80, 264, 28);
+		tabAtualizarCurso.add(cbNomeDesejavel);
+		cbNomeDesejavel.setEditable(true);
 		
 		JLabel lblNovoNome = new JLabel("Novo Nome:");
 		lblNovoNome.setFont(new Font("Dialog", Font.BOLD, 14));
@@ -170,13 +171,12 @@ public class TelaCurso extends JFrame {
 		
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.setBounds(243, 85, 129, 30);
-		tabConsultarCurso.add(btnBuscar);
+		tabConsultarCurso.add(btnBuscar);;
 		
-		tfBuscar = new JTextField();
-		tfBuscar.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfBuscar.setBounds(379, 59, 203, 25);
-		tabConsultarCurso.add(tfBuscar);
-		tfBuscar.setColumns(10);
+		cbBuscar = new JComboBox<>();
+		cbBuscar.setBounds(379, 59, 203, 25);
+		tabConsultarCurso.add(cbBuscar);
+		cbBuscar.setEditable(true);
 		
 		tableConsultar = new JTable();
 		tableConsultar.setBounds(12, 135, 587, 255);
@@ -191,11 +191,10 @@ public class TelaCurso extends JFrame {
 		lblNomeDesejavel2.setBounds(24, 59, 486, 30);
 		tabDeleteCurso.add(lblNomeDesejavel2);
 		
-		tfNomeDesejavel2 = new JTextField();
-		tfNomeDesejavel2.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfNomeDesejavel2.setBounds(24, 89, 536, 30);
-		tabDeleteCurso.add(tfNomeDesejavel2);
-		tfNomeDesejavel2.setColumns(10);
+		cbNomeDesejavel2 = new JComboBox<>();
+		cbNomeDesejavel2.setBounds(24, 89, 536, 30);
+		tabDeleteCurso.add(cbNomeDesejavel2);
+		cbNomeDesejavel2.setEditable(true);
 		
 		JTextArea taResultadoDeletar = new JTextArea();
 		taResultadoDeletar.setFont(new Font("Dialog", Font.PLAIN, 14));
@@ -212,8 +211,8 @@ public class TelaCurso extends JFrame {
 		btnVoltar4.setBounds(470, 10, 120, 33);
 		tabDeleteCurso.add(btnVoltar4);
 		
-		CursoController vCurso = new CursoController(tfCadastrarID, tfCadastrarNome, tfCadastrarArea, taResultadoCadastrar, tfNomeDesejavel, 
-				tfNovoNome, tfNovaArea, taResultadoAtualizar, tfBuscar, tableConsultar, tfNomeDesejavel2, taResultadoDeletar);
+		CursoController vCurso = new CursoController(tfCadastrarID, tfCadastrarNome, tfCadastrarArea, taResultadoCadastrar, cbNomeDesejavel, 
+				tfNovoNome, tfNovaArea, taResultadoAtualizar, cbBuscar, tableConsultar, cbNomeDesejavel2, taResultadoDeletar);
 		
 		btnCadastrar.addActionListener(vCurso);
 		btnAtualizar.addActionListener(vCurso);

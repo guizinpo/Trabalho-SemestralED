@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 
 import model.Disciplina;
@@ -257,9 +258,7 @@ public class DisciplinaController implements ActionListener{
     		linhas[i][5] = info[5];
     	}
         
-        tableConsultar.setModel(
-        		new javax.swing.table.DefaultTableModel(linhas, colunas)
-        		); 	
+        tableConsultar.setModel(new DefaultTableModel(linhas, colunas)); 	
     }
     
     public  Fila<String> carregarFila() throws Exception{

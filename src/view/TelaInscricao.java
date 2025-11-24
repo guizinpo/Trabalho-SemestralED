@@ -14,7 +14,7 @@ public class TelaInscricao extends JFrame {
     private JTabbedPane tabbedPane;
 
     // Cadastrar
-    private JTextField tfCpf;
+    private JComboBox<String> cbCpf;
     private JComboBox<String> cbIdDisciplina;
     private JComboBox<String> cbCodigoProcesso;
     private JTextArea taResultadoCadastrar;
@@ -55,10 +55,11 @@ public class TelaInscricao extends JFrame {
         JLabel lblCpf = new JLabel("CPF do Professor:");
         lblCpf.setBounds(30, 30, 200, 25);
         tabCadastrar.add(lblCpf);
-
-        tfCpf = new JTextField();
-        tfCpf.setBounds(30, 55, 250, 25);
-        tabCadastrar.add(tfCpf);
+        
+        cbCpf = new JComboBox<>();
+        cbCpf.setBounds(30, 55, 250, 25);
+		tabCadastrar.add(cbCpf);
+		cbCpf.setEditable(true);
 
         JLabel lblDisciplina = new JLabel("ID da Disciplina:");
         lblDisciplina.setBounds(30, 90, 200, 25);
@@ -191,7 +192,7 @@ public class TelaInscricao extends JFrame {
 
         InscricaoController controller = new InscricaoController(
                 // CADASTRAR
-                tfCpf,
+                cbCpf,
                 cbIdDisciplina,
                 cbCodigoProcesso,
                 taResultadoCadastrar,

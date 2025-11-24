@@ -25,20 +25,20 @@ public class TelaProfessor extends JFrame {
     private JTextArea taCadastrar;
 
     // ATUALIZAR
-    private JTextField tfCpfAtualizar;
+    private JComboBox<String> cbCpfAtualizar;
     private JTextField tfNovoNome;
     private JTextField tfNovaArea;
     private JTextArea taAtualizar;
 
     // CONSULTAR
-    private JTextField tfBuscarCpf;
+    private JComboBox<String> cbBuscarCpf;
     private JTable tabelaBuscar;
 
     // LISTAR TODOS
     private JTable tabelaListar;
 
     // DELETAR
-    private JTextField tfCpfDeletar;
+    private JComboBox<String> cbCpfDeletar;
     private JTextArea taDeletar;
 
     private ProfessorController controller;
@@ -111,10 +111,11 @@ public class TelaProfessor extends JFrame {
         lblCpfAtt.setFont(new Font("Dialog", Font.BOLD, 14));
         lblCpfAtt.setBounds(30, 20, 200, 25);
         tabAtualizar.add(lblCpfAtt);
-
-        tfCpfAtualizar = new JTextField();
-        tfCpfAtualizar.setBounds(30, 45, 250, 25);
-        tabAtualizar.add(tfCpfAtualizar);
+        
+        cbCpfAtualizar = new JComboBox<>();
+        cbCpfAtualizar.setBounds(30, 45, 250, 25);
+        tabAtualizar.add(cbCpfAtualizar);
+		cbCpfAtualizar.setEditable(true);
 
         JLabel lblNovoNomeLbl = new JLabel("Novo Nome:");
         lblNovoNomeLbl.setFont(new Font("Dialog", Font.BOLD, 14));
@@ -155,10 +156,11 @@ public class TelaProfessor extends JFrame {
         lblBuscarCpfLbl.setFont(new Font("Dialog", Font.BOLD, 14));
         lblBuscarCpfLbl.setBounds(30, 20, 200, 25);
         tabConsultar.add(lblBuscarCpfLbl);
-
-        tfBuscarCpf = new JTextField();
-        tfBuscarCpf.setBounds(30, 45, 250, 25);
-        tabConsultar.add(tfBuscarCpf);
+        
+        cbBuscarCpf = new JComboBox<>();
+        cbBuscarCpf.setBounds(30, 45, 250, 25);
+        tabConsultar.add(cbBuscarCpf);
+        cbBuscarCpf.setEditable(true);
 
         JButton btnBuscar = new JButton("Buscar");
         btnBuscar.setBounds(330, 45, 150, 30);
@@ -200,10 +202,11 @@ public class TelaProfessor extends JFrame {
         lblCpfDel.setFont(new Font("Dialog", Font.BOLD, 14));
         lblCpfDel.setBounds(30, 20, 200, 25);
         tabDeletar.add(lblCpfDel);
-
-        tfCpfDeletar = new JTextField();
-        tfCpfDeletar.setBounds(30, 45, 250, 25);
-        tabDeletar.add(tfCpfDeletar);
+        
+        cbCpfDeletar = new JComboBox<>();
+        cbCpfDeletar.setBounds(30, 45, 250, 25);
+        tabDeletar.add(cbCpfDeletar);
+        cbCpfDeletar.setEditable(true);
 
         JButton btnDeletar = new JButton("Deletar");
         btnDeletar.setBounds(330, 45, 150, 30);
@@ -230,6 +233,12 @@ public class TelaProfessor extends JFrame {
 		btnVoltar3.addActionListener(e -> voltarParaInicial());
 		btnVoltar4.addActionListener(e -> voltarParaInicial());
 		btnVoltar5.addActionListener(e -> voltarParaInicial());
+		
+		try {
+			carregarCbProfessor();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
     }
 
     private void cadastrar() {
@@ -242,6 +251,8 @@ public class TelaProfessor extends JFrame {
 
             controller.inserir(p);
             taCadastrar.setText("Professor cadastrado com sucesso!\nPontuação: " + p.getPontos());
+            
+            carregarCbProfessor();
         } catch (Exception e) {
             taCadastrar.setText("Erro: " + e.getMessage());
         }
@@ -250,7 +261,7 @@ public class TelaProfessor extends JFrame {
     private void atualizar() {
         try {
             Professor p = new Professor();
-            p.setCpf(tfCpfAtualizar.getText());
+            p.setCpf((String)cbCpfAtualizar.getSelectedItem());
             p.setNome(tfNovoNome.getText());
             p.setArea(tfNovaArea.getText());
             p.setPontos(controller.buscarPorCPF(p.getCpf()).getPontos());
@@ -264,7 +275,7 @@ public class TelaProfessor extends JFrame {
 
     private void buscarCPF() {
         try {
-            String cpf = tfBuscarCpf.getText();
+            String cpf = (String) cbBuscarCpf.getSelectedItem();
             Professor p = controller.buscarPorCPF(cpf);
 
             String[] colunas = { "CPF", "Nome", "Área", "Pontos" };
@@ -308,8 +319,9 @@ public class TelaProfessor extends JFrame {
 
     private void deletar() {
         try {
-            controller.remover(tfCpfDeletar.getText());
+            controller.remover((String) cbCpfDeletar.getSelectedItem());
             taDeletar.setText("Professor removido com sucesso!");
+            carregarCbProfessor();
         } catch (Exception e) {
             taDeletar.setText("Erro: " + e.getMessage());
         }
@@ -320,4 +332,20 @@ public class TelaProfessor extends JFrame {
 		tela.setVisible(true);
 		dispose();
 	}
+    
+    private void carregarCbProfessor() throws Exception {
+    	
+    	Lista<Professor> professores = controller.listar();
+    	
+    	int tamanho = professores.size();
+    	cbBuscarCpf.addItem("");
+    	cbCpfAtualizar.addItem("");
+    	cbCpfDeletar.addItem("");
+    	for(int i = 0; i < tamanho; i++) {
+    		Professor professor = professores.get(i);
+    		cbBuscarCpf.addItem(professor.getCpf());
+        	cbCpfAtualizar.addItem(professor.getCpf());
+        	cbCpfDeletar.addItem(professor.getCpf());
+    	}
+    }
 }
