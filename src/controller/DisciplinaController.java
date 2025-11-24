@@ -43,12 +43,15 @@ public class DisciplinaController implements ActionListener{
 	private JTextField tfDeletarId;
 	private JTextArea taResultadoDeletar;
 
+	public DisciplinaController() {
+		super();
+	}
+	
     public DisciplinaController(JTextField tfCadastrarNome, JTextField tfCadastrarID, JTextField tfCadastrarIdCurso,
     		JTextField tfCadastroDiaSemana, JTextField tfCadastrarHoraInicial, JTextField tfCadastrarHorasDiarias,
     		JTextArea taResultadoCadastrar, JTextField tfAtualizarId, JTextField tfNovoNome, JTextField tfNovoIdCurso,
     		JTextField tfNovoDiaSemana, JTextField tfNovoHoraInicial, JTextField tfNovoHorasDiarias, JTextArea taResultadoAtualizar,
     		JTextField tfDeletarId, JTextArea taResultadoDeletar, JTextField tfBuscar, JTable tableConsultar){
-        super();
         
         this.tfCadastrarNome = tfCadastrarNome;
         this.tfCadastrarID = tfCadastrarID;
@@ -217,6 +220,9 @@ public class DisciplinaController implements ActionListener{
         else if(operacao == "Buscar") {
         	id = tfBuscar.getText().trim();
         }
+        else {
+        	id = operacao;
+        }
 
         Lista<Disciplina> disciplinas = carregarDisciplinas();
         int tamanho = disciplinas.size();
@@ -231,7 +237,7 @@ public class DisciplinaController implements ActionListener{
     }
     
     public void carregarTabela(Fila<String> fila) throws Exception {
-    	String[] colunas = {"ID", "Nome", "Dia da Semana", "Hora Inicial", "Horas Diarias", "ID Curso"};
+    	String[] colunas = {"ID", "Nome", "DiaSemana", "HoraInicial", "HorasDiarias", "IdCurso"};
     	int tamanho = fila.size();
     	Object[][] linhas = new Object[tamanho][6];
     	
