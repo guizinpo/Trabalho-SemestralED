@@ -189,7 +189,8 @@ public class TelaProcesso extends JFrame {
 		/*
 		 * Ações
 		 */
-		ProcessoController pc = new ProcessoController(tfCadastrarCodigo, tfCadastrarDisciplina, tfAtualizarCodigo, tfAtualizarStatus, tbConsultar);
+		ProcessoController pc = new ProcessoController(tfCadastrarCodigo, tfCadastrarDisciplina, tfAtualizarCodigo, 
+				tfAtualizarStatus, tbConsultar, taResultadoCadastro, taResultadoAtualizar);
 		
 		btnAdicionar.addActionListener(pc);
 		btnPesquisar.addActionListener(pc);
