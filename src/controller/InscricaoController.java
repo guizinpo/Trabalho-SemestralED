@@ -4,15 +4,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import br.edu.fateczl.listaSimples.Lista;
 import br.edu.fateczl.quick.quick;
+import model.Disciplina;
 import model.Inscricao;
 import model.Professor;
 import model.InscritoCompleto;
+import model.Processo;
 import util.arquivoUtil;
 
 public class InscricaoController implements ActionListener {
@@ -20,19 +23,19 @@ public class InscricaoController implements ActionListener {
     private static final String CAMINHO = "resources/inscricoes.csv";
 
     private JTextField tfCpfCadastrar;
-    private JTextField tfIdDisciplinaCadastrar;
-    private JTextField tfCodigoProcessoCadastrar;
+    private JComboBox<String> cbIdDisciplinaCadastrar;
+    private JComboBox<String> cbCodigoProcessoCadastrar;
     private JTextArea taCadastrar;
 
-    private JTextField tfCpfAtualizar;
-    private JTextField tfNovoCodigoProcesso;
+    private JComboBox<String> cbCpfAtualizar;
+    private JComboBox<String> cbNovoCodigoProcesso;
     private JTextArea taAtualizar;
 
-    private JTextField tfBuscarDisciplina;
+    private JComboBox<String> cbBuscarDisciplina;
     private JTable tabelaConsulta;
 
-    private JTextField tfCpfDeletar;
-    private JTextField tfCodigoProcessoDeletar;
+    private JComboBox<String> cbCpfDeletar;
+    private JComboBox<String> cbCodigoProcessoDeletar;
     private JTextArea taDeletar;
 
     private ProfessorController professorController = new ProfessorController();
@@ -43,37 +46,45 @@ public class InscricaoController implements ActionListener {
 
     public InscricaoController(
             JTextField tfCpfCadastrar,
-            JTextField tfIdDisciplinaCadastrar,
-            JTextField tfCodigoProcessoCadastrar,
+            JComboBox<String> cbIdDisciplinaCadastrar,
+            JComboBox<String> cbCodigoProcessoCadastrar,
             JTextArea taCadastrar,
 
-            JTextField tfCpfAtualizar,
-            JTextField tfNovoCodigoProcesso,
+            JComboBox<String> cbCpfAtualizar,
+            JComboBox<String> cbNovoCodigoProcesso,
             JTextArea taAtualizar,
 
-            JTextField tfBuscarDisciplina,
+            JComboBox<String> cbBuscarDisciplina,
             JTable tabelaConsulta,
 
-            JTextField tfCpfDeletar,
-            JTextField tfCodigoProcessoDeletar,
+            JComboBox<String> cbCpfDeletar,
+            JComboBox<String> cbCodigoProcessoDeletar,
             JTextArea taDeletar
     ) {
 
         this.tfCpfCadastrar = tfCpfCadastrar;
-        this.tfIdDisciplinaCadastrar = tfIdDisciplinaCadastrar;
-        this.tfCodigoProcessoCadastrar = tfCodigoProcessoCadastrar;
+        this.cbIdDisciplinaCadastrar = cbIdDisciplinaCadastrar;
+        this.cbCodigoProcessoCadastrar = cbCodigoProcessoCadastrar;
         this.taCadastrar = taCadastrar;
 
-        this.tfCpfAtualizar = tfCpfAtualizar;
-        this.tfNovoCodigoProcesso = tfNovoCodigoProcesso;
+        this.cbCpfAtualizar = cbCpfAtualizar;
+        this.cbNovoCodigoProcesso = cbNovoCodigoProcesso;
         this.taAtualizar = taAtualizar;
 
-        this.tfBuscarDisciplina = tfBuscarDisciplina;
+        this.cbBuscarDisciplina = cbBuscarDisciplina;
         this.tabelaConsulta = tabelaConsulta;
 
-        this.tfCpfDeletar = tfCpfDeletar;
-        this.tfCodigoProcessoDeletar = tfCodigoProcessoDeletar;
+        this.cbCpfDeletar = cbCpfDeletar;
+        this.cbCodigoProcessoDeletar = cbCodigoProcessoDeletar;
         this.taDeletar = taDeletar;
+        
+        try {
+        	carregarCbDisciplina();
+        	carregarCbInscricao();
+        	carregarCbProcesso();
+        }catch(Exception e) {
+        	e.printStackTrace();
+        }
     }
 
     @Override
@@ -85,6 +96,7 @@ public class InscricaoController implements ActionListener {
 
                 case "Cadastrar":
                     cadastrarInscricao();
+                    carregarCbInscricao();
                     break;
 
                 case "Atualizar":
@@ -97,6 +109,7 @@ public class InscricaoController implements ActionListener {
 
                 case "Deletar":
                     deletarInscricao();
+                    carregarCbInscricao();
                     break;
             }
         } catch (Exception ex) {
@@ -106,8 +119,8 @@ public class InscricaoController implements ActionListener {
 
     private void cadastrarInscricao() throws Exception {
         String cpf = tfCpfCadastrar.getText().trim();
-        String disciplina = tfIdDisciplinaCadastrar.getText().trim();
-        String processo = tfCodigoProcessoCadastrar.getText().trim();
+        String disciplina = (String) cbIdDisciplinaCadastrar.getSelectedItem();
+        String processo = (String) cbCodigoProcessoCadastrar.getSelectedItem();
 
         if (cpf.isEmpty() || disciplina.isEmpty() || processo.isEmpty()) {
             taCadastrar.setText("Preencha todos os campos!");
@@ -120,15 +133,16 @@ public class InscricaoController implements ActionListener {
             return;
         }
 
-        Inscricao ins = new Inscricao(cpf, disciplina, processo);
+        Inscricao ins = new Inscricao(cpf, disciplina.trim(), processo.trim());
         arquivoUtil.adicionarLinha(CAMINHO, ins.toString());
 
         taCadastrar.setText("Inscrição cadastrada com sucesso!");
+        
     }
 
     private void atualizarInscricao() throws Exception {
-        String cpf = tfCpfAtualizar.getText().trim();
-        String novoProcesso = tfNovoCodigoProcesso.getText().trim();
+        String cpf = (String) cbCpfAtualizar.getSelectedItem();
+        String novoProcesso = (String) cbNovoCodigoProcesso.getSelectedItem();
 
         if (cpf.isEmpty() || novoProcesso.isEmpty()) {
             taAtualizar.setText("Preencha todos os campos!");
@@ -143,8 +157,8 @@ public class InscricaoController implements ActionListener {
         for (int i = 0; i < inscricoes.size(); i++) {
             Inscricao ins = inscricoes.get(i);
 
-            if (ins.getCpfProfessor().equals(cpf)) {
-                ins.setCodigoProcesso(novoProcesso);
+            if (ins.getCpfProfessor().equals(cpf.trim())) {
+                ins.setCodigoProcesso(novoProcesso.trim());
                 atualizado = true;
             }
 
@@ -161,7 +175,7 @@ public class InscricaoController implements ActionListener {
     }
 
     private void consultarInscritos() throws Exception {
-        String idDisciplina = tfBuscarDisciplina.getText().trim();
+        String idDisciplina = (String) cbBuscarDisciplina.getSelectedItem();
 
         Lista<Inscricao> todas = listar();
         Lista<InscritoCompleto> lista = new Lista<>();
@@ -170,7 +184,7 @@ public class InscricaoController implements ActionListener {
         for (int i = 0; i < todas.size(); i++) {
             Inscricao ins = todas.get(i);
 
-            if (ins.getIdDisciplina().equals(idDisciplina)) {
+            if (ins.getIdDisciplina().equals(idDisciplina.trim())) {
 
                 Professor p = professorController.buscarPorCPF(ins.getCpfProfessor());
 
@@ -192,8 +206,8 @@ public class InscricaoController implements ActionListener {
     }
 
     private void deletarInscricao() throws Exception {
-        String cpf = tfCpfDeletar.getText().trim();
-        String processo = tfCodigoProcessoDeletar.getText().trim();
+        String cpf = (String) cbCpfDeletar.getSelectedItem();
+        String processo = (String) cbCodigoProcessoDeletar.getActionCommand();
 
         Lista<Inscricao> todas = listar();
         Lista<String> novasLinhas = new Lista<>();
@@ -203,8 +217,8 @@ public class InscricaoController implements ActionListener {
         for (int i = 0; i < todas.size(); i++) {
             Inscricao ins = todas.get(i);
 
-            if (ins.getCpfProfessor().equals(cpf)
-                    && ins.getCodigoProcesso().equals(processo)) {
+            if (ins.getCpfProfessor().equals(cpf.trim())
+                    && ins.getCodigoProcesso().equals(processo.trim())) {
                 removido = true;
             } else {
                 novasLinhas.add(ins.toString(), novasLinhas.size());
@@ -215,6 +229,7 @@ public class InscricaoController implements ActionListener {
 
         if (removido) taDeletar.setText("Inscrição removida com sucesso!");
         else taDeletar.setText("Inscrição não encontrada.");
+        
     }
     
     public void remover(String cpf, String processo) throws Exception {
@@ -302,5 +317,49 @@ public class InscricaoController implements ActionListener {
         }
 
         tabelaConsulta.setModel(new javax.swing.table.DefaultTableModel(dados, colunas));
+    }
+    
+    private void carregarCbDisciplina() throws Exception {
+    	DisciplinaController dc = new DisciplinaController();
+    	Lista<Disciplina> disciplinas = dc.carregarDisciplinas();
+    	
+    	int tamanho = disciplinas.size();
+    	cbBuscarDisciplina.addItem("");
+    	cbIdDisciplinaCadastrar.addItem("");
+    	for(int i = 0; i < tamanho; i++) {
+    		Disciplina disciplina = disciplinas.get(i);
+    		cbBuscarDisciplina.addItem(disciplina.getId());
+        	cbIdDisciplinaCadastrar.addItem(disciplina.getId());
+    	}
+    }
+    
+    private void carregarCbProcesso() throws Exception {
+    	ProcessoController pc = new ProcessoController();
+    	Lista<Processo> processos = pc.carregarProcessos();
+    	
+    	int tamanho = processos.size();
+    	cbCodigoProcessoCadastrar.addItem("");
+    	cbCodigoProcessoDeletar.addItem("");
+    	cbNovoCodigoProcesso.addItem("");
+    	for(int i = 0; i < tamanho; i++) {
+    		Processo processo = processos.get(i);
+    		cbCodigoProcessoCadastrar.addItem(processo.getCodigoProcesso());
+        	cbCodigoProcessoDeletar.addItem(processo.getCodigoProcesso());
+        	cbNovoCodigoProcesso.addItem(processo.getCodigoProcesso());
+    	}
+    }
+    
+    private void carregarCbInscricao() throws Exception {
+    	Lista<Inscricao> inscricoes = listar();
+    	
+    	int tamanho = inscricoes.size();
+    	cbCpfAtualizar.addItem("");
+    	cbCpfDeletar.addItem("");
+    	
+    	for(int i = 0; i < tamanho; i++) {
+    		Inscricao inscricao = inscricoes.get(i);
+    		cbCpfAtualizar.addItem(inscricao.getCpfProfessor());
+    		cbCpfDeletar.addItem(inscricao.getCpfProfessor());
+    	}
     }
 }

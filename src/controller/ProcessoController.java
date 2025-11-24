@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -17,60 +18,57 @@ public class ProcessoController implements ActionListener {
 	private static final String CAMINHOPROCESSO = "resources/processo.csv";
 
 	private JTextField tfCadastrarCodigo;
-	private JTextField tfCadastrarDisciplina;
-	private JTextField tfAtualizarCodigo;
+	private JComboBox<String> cbCadastrarDisciplina;
+	private JComboBox<String> cbAtualizarCodigo;
 	private JTextField tfAtualizarStatus;
 	private JTextArea taResultadoCadastro;
 	private JTextArea taResultadoAtualizar;
 	private JTable tbConsultar;
 	
-	public ProcessoController(JTextField tfCadastrarCodigo, JTextField tfCadastrarDisciplina,
-			JTextField tfAtualizarCodigo, JTextField tfAtualizarStatus, JTable tbConsultar, JTextArea taResultadoCadastro, JTextArea taResultadoAtualizar) {
+	public ProcessoController() {
+		super();
+	}
+	
+	public ProcessoController(JTextField tfCadastrarCodigo, JComboBox<String> cbCadastrarDisciplina,
+			JComboBox<String> cbAtualizarCodigo, JTextField tfAtualizarStatus, JTable tbConsultar, JTextArea taResultadoCadastro, JTextArea taResultadoAtualizar) {
 		super();
 		
 		this.tfCadastrarCodigo = tfCadastrarCodigo;
-		this.tfCadastrarDisciplina = tfCadastrarDisciplina;
-		this.tfAtualizarCodigo = tfAtualizarCodigo;
+		this.cbCadastrarDisciplina = cbCadastrarDisciplina;
+		this.cbAtualizarCodigo = cbAtualizarCodigo;
 		this.tfAtualizarStatus = tfAtualizarStatus;
 		this.tbConsultar = tbConsultar;
 		this.taResultadoCadastro = taResultadoCadastro;
 		this.taResultadoAtualizar = taResultadoAtualizar;
+		
+		try {
+        	carregarCbDisciplina();
+        	carregarCbCodProcesso();
+        }catch(Exception e) {
+        	e.printStackTrace();
+        }
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		
-		if(cmd.equals("Adicionar")) {
-			try {
+		try {
+			if(cmd.equals("Adicionar")) {
 				adicionarProcesso();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			} 
-		}
-		if(cmd.equals("Atualizar")) {
-			try {
+				carregarCbCodProcesso();
+			}
+			if(cmd.equals("Atualizar")) {
 				atualizarProcesso();
-			} catch (Exception e1) {
-				e1.printStackTrace();
 			}
-		}
-		if(cmd.equals("Listar")) {
-			try {
+			if(cmd.equals("Listar")) {
 				listarProcessosAbertos();
-		    } catch (Exception e1) {
-		        e1.printStackTrace();
-		    }
-		}
-		if(cmd.equals("Pesquisar")) {
-			try {
-				pesquisarProcesso();
-			
-			} catch (Exception e1) {
-				e1.printStackTrace();
 			}
+			if(cmd.equals("Pesquisar")) {
+				pesquisarProcesso();
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
 		}
-		
 	}
 	
 	public Lista<Processo> carregarProcessos() throws Exception{
@@ -106,7 +104,7 @@ public class ProcessoController implements ActionListener {
 	
 	public void adicionarProcesso() throws Exception{
         String codigoProcesso = tfCadastrarCodigo.getText().trim();
-        String idDisciplina = tfCadastrarDisciplina.getText().trim();
+        String idDisciplina = (String) cbCadastrarDisciplina.getSelectedItem();
         String status = "aberto";
                 
         if(codigoProcesso.isBlank() || idDisciplina.isBlank()) {
@@ -123,20 +121,20 @@ public class ProcessoController implements ActionListener {
             	return;
         	}
         }
-        Processo processo = new Processo(codigoProcesso, idDisciplina, status);
+        Processo processo = new Processo(codigoProcesso, idDisciplina.trim(), status);
         arquivoUtil.adicionarLinha(CAMINHOPROCESSO, processo.toString());
         taResultadoCadastro.setText("Adicionado com sucesso.");
     }
 	
 	 public void pesquisarProcesso() throws Exception{
-	        String codigo = tfAtualizarCodigo.getText().trim();
+	        String codigo = (String) cbAtualizarCodigo.getSelectedItem();
 
 	        Lista<Processo> processos = carregarProcessos();
 	        int tamanho = processos.size();
 	        
 	        for(int i = 0; i < tamanho; i++) {
 	        	Processo proc = processos.get(i);
-	    		if(proc.getCodigoProcesso().equals(codigo)) {
+	    		if(proc.getCodigoProcesso().equals(codigo.trim())) {
 	    			String msg = "";
 	    			msg += "Codigo do Processo: " + proc.getCodigoProcesso();
 	    			msg += "\nID da Disciplina: " + proc.getIdDisciplina();
@@ -151,14 +149,14 @@ public class ProcessoController implements ActionListener {
 	    	Lista<Processo> processos = carregarProcessos();
 	    	Lista<Processo> linhas = new Lista<>();
 	    	boolean atualizado = false;
-	    	String codigo = tfAtualizarCodigo.getText().trim();
+	    	String codigo = (String) cbAtualizarCodigo.getSelectedItem();
 	        String status = tfAtualizarStatus.getText().toLowerCase().trim();	       
 	        
 	        int tamanho = processos.size();
 
 	    	for(int i = 0; i < tamanho; i++) {
 	    		Processo proc = processos.get(i);
-	    		if(proc.getCodigoProcesso().equals(codigo)) {
+	    		if(proc.getCodigoProcesso().equals(codigo.trim())) {
 	    			if(!status.isBlank()) {
 	    				if(status.equals("fechado") || status.equals("aberto")) {
 	    					proc.setStatus(status);
@@ -233,4 +231,28 @@ public class ProcessoController implements ActionListener {
 	        		new javax.swing.table.DefaultTableModel(linhas, colunas)
 	        		);
 	 }
+	 
+	 private void carregarCbDisciplina() throws Exception {
+		 DisciplinaController dc = new DisciplinaController();
+    	Lista<Disciplina> disciplinas = dc.carregarDisciplinas();
+    	
+    	int tamanho = disciplinas.size();
+    	cbCadastrarDisciplina.addItem("");
+    	
+    	for(int i = 0; i < tamanho; i++) {
+    		Disciplina disciplina = disciplinas.get(i);
+    		cbCadastrarDisciplina.addItem(disciplina.getId());
+    	}
+    }
+	    
+	    private void carregarCbCodProcesso() throws Exception {
+    	Lista<Processo> processos = carregarProcessos();
+    	
+    	int tamanho = processos.size();
+    	cbAtualizarCodigo.addItem("");
+    	for(int i = 0; i < tamanho; i++) {
+    		Processo processo = processos.get(i);
+    		cbAtualizarCodigo.addItem(processo.getCodigoProcesso());
+    	}
+    }
 }

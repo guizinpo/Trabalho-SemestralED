@@ -97,6 +97,10 @@ public class TelaProfessor extends JFrame {
         taCadastrar = new JTextArea();
         taCadastrar.setBounds(30, 220, 580, 160);
         tabCadastrar.add(taCadastrar);
+        
+        JButton btnVoltar1 = new JButton("Voltar");
+        btnVoltar1.setBounds(520, 10, 100, 30);
+        tabCadastrar.add(btnVoltar1);
 
         tabbedPane.addTab("Cadastrar", tabCadastrar);
 
@@ -137,6 +141,10 @@ public class TelaProfessor extends JFrame {
         taAtualizar = new JTextArea();
         taAtualizar.setBounds(30, 220, 580, 160);
         tabAtualizar.add(taAtualizar);
+        
+        JButton btnVoltar2 = new JButton("Voltar");
+        btnVoltar2.setBounds(520, 10, 100, 30);
+        tabAtualizar.add(btnVoltar2);
 
         tabbedPane.addTab("Atualizar", tabAtualizar);
 
@@ -160,6 +168,10 @@ public class TelaProfessor extends JFrame {
         JScrollPane scrollBuscar = new JScrollPane(tabelaBuscar);
         scrollBuscar.setBounds(30, 100, 580, 280);
         tabConsultar.add(scrollBuscar);
+        
+        JButton btnVoltar3 = new JButton("Voltar");
+        btnVoltar3.setBounds(520, 10, 100, 30);
+        tabConsultar.add(btnVoltar3);
 
         tabbedPane.addTab("Consultar", tabConsultar);
 
@@ -174,6 +186,10 @@ public class TelaProfessor extends JFrame {
         JScrollPane scrollListar = new JScrollPane(tabelaListar);
         scrollListar.setBounds(30, 80, 580, 300);
         tabListar.add(scrollListar);
+        
+        JButton btnVoltar4 = new JButton("Voltar");
+        btnVoltar4.setBounds(520, 10, 100, 30);
+        tabListar.add(btnVoltar4);
 
         tabbedPane.addTab("Listar Todos", tabListar);
 
@@ -196,6 +212,10 @@ public class TelaProfessor extends JFrame {
         taDeletar = new JTextArea();
         taDeletar.setBounds(30, 100, 580, 280);
         tabDeletar.add(taDeletar);
+        
+        JButton btnVoltar5 = new JButton("Voltar");
+        btnVoltar5.setBounds(520, 10, 100, 30);
+        tabDeletar.add(btnVoltar5);
 
         tabbedPane.addTab("Deletar", tabDeletar);
 
@@ -204,6 +224,12 @@ public class TelaProfessor extends JFrame {
         btnBuscar.addActionListener(e -> buscarCPF());
         btnListar.addActionListener(e -> listarTodos());
         btnDeletar.addActionListener(e -> deletar());
+        
+        btnVoltar1.addActionListener(e -> voltarParaInicial());
+		btnVoltar2.addActionListener(e -> voltarParaInicial());
+		btnVoltar3.addActionListener(e -> voltarParaInicial());
+		btnVoltar4.addActionListener(e -> voltarParaInicial());
+		btnVoltar5.addActionListener(e -> voltarParaInicial());
     }
 
     private void cadastrar() {
@@ -288,4 +314,10 @@ public class TelaProfessor extends JFrame {
             taDeletar.setText("Erro: " + e.getMessage());
         }
     }
+    
+    public void voltarParaInicial() {
+		TelaInicial tela = new TelaInicial();
+		tela.setVisible(true);
+		dispose();
+	}
 }
