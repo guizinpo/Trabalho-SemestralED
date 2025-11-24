@@ -273,6 +273,10 @@ public class DisciplinaController implements ActionListener{
     }
     
     private void carregarCbDisciplina() throws Exception {
+    	cbAtualizarId.removeAllItems();
+    	cbBuscar.removeAllItems();
+    	cbDeletarId.removeAllItems();
+    	
     	Lista<Disciplina> disciplinas = carregarDisciplinas();
     	
     	int tamanho = disciplinas.size();
@@ -288,6 +292,9 @@ public class DisciplinaController implements ActionListener{
     }
     
     private void carregarCbCurso() throws Exception {
+    	cbCadastroCurso.removeAllItems();
+    	cbNovoIdCurso.removeAllItems();
+    	
     	CursoController cc = new CursoController();
     	Lista<Curso> cursos = cc.listarCursos();
     	

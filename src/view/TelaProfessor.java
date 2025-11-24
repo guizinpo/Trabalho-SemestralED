@@ -334,6 +334,9 @@ public class TelaProfessor extends JFrame {
 	}
     
     private void carregarCbProfessor() throws Exception {
+    	cbBuscarCpf.removeAllItems();
+    	cbCpfAtualizar.removeAllItems();
+    	cbCpfDeletar.removeAllItems();
     	
     	Lista<Professor> professores = controller.listar();
     	

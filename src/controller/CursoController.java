@@ -288,6 +288,10 @@ public class CursoController implements ActionListener {
 	}
 	
 	private void carregarCbCurso() throws Exception {
+		cbBuscar.removeAllItems();
+    	cbNomeDesejavel.removeAllItems();
+    	cbNomeDesejavel2.removeAllItems();
+		
     	Lista<Curso> cursos = listarCursos();
     	
     	int tamanho = cursos.size();

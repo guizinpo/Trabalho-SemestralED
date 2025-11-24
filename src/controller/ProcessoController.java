@@ -233,7 +233,9 @@ public class ProcessoController implements ActionListener {
 	 }
 	 
 	 private void carregarCbDisciplina() throws Exception {
-		 DisciplinaController dc = new DisciplinaController();
+		 cbCadastrarDisciplina.removeAllItems();
+		 
+		DisciplinaController dc = new DisciplinaController();
     	Lista<Disciplina> disciplinas = dc.carregarDisciplinas();
     	
     	int tamanho = disciplinas.size();
@@ -246,13 +248,15 @@ public class ProcessoController implements ActionListener {
     }
 	    
 	    private void carregarCbCodProcesso() throws Exception {
-    	Lista<Processo> processos = carregarProcessos();
-    	
-    	int tamanho = processos.size();
-    	cbAtualizarCodigo.addItem("");
-    	for(int i = 0; i < tamanho; i++) {
-    		Processo processo = processos.get(i);
-    		cbAtualizarCodigo.addItem(processo.getCodigoProcesso());
+	    	cbAtualizarCodigo.removeAllItems();
+	    	
+	    	Lista<Processo> processos = carregarProcessos();
+	    	
+	    	int tamanho = processos.size();
+	    	cbAtualizarCodigo.addItem("");
+	    	for(int i = 0; i < tamanho; i++) {
+	    		Processo processo = processos.get(i);
+	    		cbAtualizarCodigo.addItem(processo.getCodigoProcesso());
     	}
     }
 }
