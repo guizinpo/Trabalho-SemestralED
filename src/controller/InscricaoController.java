@@ -334,6 +334,10 @@ public class InscricaoController implements ActionListener {
     }
     
     private void carregarCbProcesso() throws Exception {
+    	cbCodigoProcessoCadastrar.removeAllItems();
+    	cbCodigoProcessoDeletar.removeAllItems();
+    	cbNovoCodigoProcesso.removeAllItems();
+    	
     	ProcessoController pc = new ProcessoController();
     	Lista<Processo> processos = pc.carregarProcessos();
     	
@@ -350,6 +354,9 @@ public class InscricaoController implements ActionListener {
     }
     
     private void carregarCbInscricao() throws Exception {
+    	cbCpfAtualizar.removeAllItems();
+    	cbCpfDeletar.removeAllItems();
+    	
     	Lista<Inscricao> inscricoes = listar();
     	
     	int tamanho = inscricoes.size();
@@ -363,6 +370,8 @@ public class InscricaoController implements ActionListener {
     }
     
     private void carregarCbProfessor() throws Exception{
+    	cbCpfCadastrar.removeAllItems();
+    	
     	ProfessorController pc = new ProfessorController();
     	Lista<Professor> professores = pc.listar();
     	

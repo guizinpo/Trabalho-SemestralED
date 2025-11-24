@@ -153,23 +153,29 @@ public class ProcessoController implements ActionListener {
 	        String status = tfAtualizarStatus.getText().toLowerCase().trim();	       
 	        
 	        int tamanho = processos.size();
-
-	    	for(int i = 0; i < tamanho; i++) {
-	    		Processo proc = processos.get(i);
-	    		if(proc.getCodigoProcesso().equals(codigo.trim())) {
-	    			if(!status.isBlank()) {
-	    				if(status.equals("fechado") || status.equals("aberto")) {
-	    					proc.setStatus(status);
-		    				atualizado = true;
-	    				}
-	    				else {
-	    					taResultadoAtualizar.setText("O status do processo tem quer 'aberto' ou 'fechado'.");
-	    				}
-	    			}	
-	    		}
-	    		linhas.addLast(proc);
-	    		
-	    	} 
+	        if(!codigo.isBlank()){
+		    	for(int i = 0; i < tamanho; i++) {
+		    		Processo proc = processos.get(i);
+		    		if(proc.getCodigoProcesso().equals(codigo.trim())) {
+		    			if(!status.isBlank()) {
+		    				if(status.equals("fechado") || status.equals("aberto")) {
+		    					proc.setStatus(status);
+			    				atualizado = true;
+		    				}
+		    				else {
+		    					taResultadoAtualizar.setText("O status do processo tem que ser 'aberto' ou 'fechado'.");
+		    				}
+		    			}
+		    			else {
+	    					taResultadoAtualizar.setText("O status do processo tem que estar preechido com 'aberto' ou 'fechado'.");
+		    			}
+		    		}
+		    		linhas.addLast(proc);	
+		    	}
+	 		}
+	        else {
+	        	taResultadoAtualizar.setText("Por favor escolha o código do processo.");
+	    	}
 	    	if(atualizado) {
 	    		taResultadoAtualizar.setText("Processo atualizado.");
 	    		salvarProcessos(linhas);
@@ -233,7 +239,9 @@ public class ProcessoController implements ActionListener {
 	 }
 	 
 	 private void carregarCbDisciplina() throws Exception {
-		 DisciplinaController dc = new DisciplinaController();
+		 cbCadastrarDisciplina.removeAllItems();
+		 
+		DisciplinaController dc = new DisciplinaController();
     	Lista<Disciplina> disciplinas = dc.carregarDisciplinas();
     	
     	int tamanho = disciplinas.size();
@@ -246,13 +254,15 @@ public class ProcessoController implements ActionListener {
     }
 	    
 	    private void carregarCbCodProcesso() throws Exception {
-    	Lista<Processo> processos = carregarProcessos();
-    	
-    	int tamanho = processos.size();
-    	cbAtualizarCodigo.addItem("");
-    	for(int i = 0; i < tamanho; i++) {
-    		Processo processo = processos.get(i);
-    		cbAtualizarCodigo.addItem(processo.getCodigoProcesso());
+	    	cbAtualizarCodigo.removeAllItems();
+	    	
+	    	Lista<Processo> processos = carregarProcessos();
+	    	
+	    	int tamanho = processos.size();
+	    	cbAtualizarCodigo.addItem("");
+	    	for(int i = 0; i < tamanho; i++) {
+	    		Processo processo = processos.get(i);
+	    		cbAtualizarCodigo.addItem(processo.getCodigoProcesso());
     	}
     }
 }

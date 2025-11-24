@@ -223,9 +223,38 @@ public class TelaProfessor extends JFrame {
         btnVoltar4.addActionListener(e -> voltarParaInicial());
     }
 
-    private void voltarParaInicial() {
-        TelaInicial tela = new TelaInicial();
-        tela.setVisible(true);
-        dispose();
+    private void deletar() {
+        try {
+            controller.remover((String) cbCpfDeletar.getSelectedItem());
+            taDeletar.setText("Professor removido com sucesso!");
+            carregarCbProfessor();
+        } catch (Exception e) {
+            taDeletar.setText("Erro: " + e.getMessage());
+        }
+    }
+    
+    public void voltarParaInicial() {
+		TelaInicial tela = new TelaInicial();
+		tela.setVisible(true);
+		dispose();
+	}
+    
+    private void carregarCbProfessor() throws Exception {
+    	cbBuscarCpf.removeAllItems();
+    	cbCpfAtualizar.removeAllItems();
+    	cbCpfDeletar.removeAllItems();
+    	
+    	Lista<Professor> professores = controller.listar();
+    	
+    	int tamanho = professores.size();
+    	cbBuscarCpf.addItem("");
+    	cbCpfAtualizar.addItem("");
+    	cbCpfDeletar.addItem("");
+    	for(int i = 0; i < tamanho; i++) {
+    		Professor professor = professores.get(i);
+    		cbBuscarCpf.addItem(professor.getCpf());
+        	cbCpfAtualizar.addItem(professor.getCpf());
+        	cbCpfDeletar.addItem(professor.getCpf());
+    	}
     }
 }

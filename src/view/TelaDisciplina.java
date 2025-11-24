@@ -256,6 +256,9 @@ public class TelaDisciplina extends JFrame {
 		taResultadoAtualizar.setBounds(26, 296, 540, 96);
 		tabAtualizarDisciplina.add(taResultadoAtualizar);
 		
+		taResultadoAtualizar.setText("Para atulizar preencha os campos que queira atulizar."
+				+ "\nOs campos em branco não vão ser atualizados."
+				+ "\nO campo do ID da disciplina é obrigatorio estar preenchido para a atualização.");
 		/*
 		 * Tab Consultar
 		 */
