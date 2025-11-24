@@ -5,6 +5,10 @@ public class Professor {
 	private String nome;
 	private String area;
 	private int pontos;
+	
+	public Professor(){
+		super();
+	}
 	 
 	public String getCpf() {
         return cpf;
@@ -35,6 +39,13 @@ public class Professor {
     }
     
     public void setPontos(int pontos) {
+        this.pontos = pontos;
+    }
+    
+    public Professor(String cpf, String nome, String area, int pontos) {
+        this.cpf = cpf;
+        this.nome = nome;
+        this.area = area;
         this.pontos = pontos;
     }
 
