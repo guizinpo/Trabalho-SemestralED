@@ -2,7 +2,6 @@ package view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import controller.ProfessorController;
 
 public class TelaProfessor extends JFrame {
@@ -35,8 +34,7 @@ public class TelaProfessor extends JFrame {
     private JComboBox<String> cbCpfDeletar;
     private JTextArea taResultadoDeletar;
 
-    public TelaProfessor() {
-
+    public TelaProfessor() {  	
         setTitle("Professores");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 680, 520);
@@ -222,39 +220,10 @@ public class TelaProfessor extends JFrame {
         btnVoltar3.addActionListener(e -> voltarParaInicial());
         btnVoltar4.addActionListener(e -> voltarParaInicial());
     }
-
-    private void deletar() {
-        try {
-            controller.remover((String) cbCpfDeletar.getSelectedItem());
-            taDeletar.setText("Professor removido com sucesso!");
-            carregarCbProfessor();
-        } catch (Exception e) {
-            taDeletar.setText("Erro: " + e.getMessage());
-        }
-    }
     
     public void voltarParaInicial() {
 		TelaInicial tela = new TelaInicial();
 		tela.setVisible(true);
 		dispose();
 	}
-    
-    private void carregarCbProfessor() throws Exception {
-    	cbBuscarCpf.removeAllItems();
-    	cbCpfAtualizar.removeAllItems();
-    	cbCpfDeletar.removeAllItems();
-    	
-    	Lista<Professor> professores = controller.listar();
-    	
-    	int tamanho = professores.size();
-    	cbBuscarCpf.addItem("");
-    	cbCpfAtualizar.addItem("");
-    	cbCpfDeletar.addItem("");
-    	for(int i = 0; i < tamanho; i++) {
-    		Professor professor = professores.get(i);
-    		cbBuscarCpf.addItem(professor.getCpf());
-        	cbCpfAtualizar.addItem(professor.getCpf());
-        	cbCpfDeletar.addItem(professor.getCpf());
-    	}
-    }
 }

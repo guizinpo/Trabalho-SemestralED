@@ -100,7 +100,7 @@ public class ProfessorController implements ActionListener {
 
                 case "Atualizar":
                     atualizar();
-                    carregarCombos();
+                    //carregarCombos();
                     break;
 
                 case "Buscar":
@@ -220,7 +220,7 @@ public class ProfessorController implements ActionListener {
     }
 
 
-    private void deletar() throws Exception {
+    public void deletar() throws Exception {
 
         String cpf = (String) cbCpfDeletar.getSelectedItem();
 
@@ -275,7 +275,6 @@ public class ProfessorController implements ActionListener {
 
 
     private void carregarCombos() throws Exception {
-
         Lista<Professor> lista = listar();
 
         cbCpfAtualizar.removeAllItems();
