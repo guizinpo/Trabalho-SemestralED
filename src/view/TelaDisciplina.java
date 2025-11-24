@@ -14,6 +14,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
 public class TelaDisciplina extends JFrame {
 
@@ -21,18 +22,18 @@ public class TelaDisciplina extends JFrame {
 	private JPanel contentPane;
 	private JTextField tfCadastrarNome;
 	private JTextField tfCadastrarID;
-	private JTextField tfCadastrarIdCurso;
+	private JComboBox<String> cbCadastroCurso;
 	private JTextField tfCadastroDiaSemana;
 	private JTextField tfCadastrarHoraInicial;
 	private JTextField tfCadastrarHorasDiarias;
-	private JTextField tfAtualizarId;
+	private JComboBox<String> cbAtualizarId;
 	private JTextField tfNovoNome;
-	private JTextField tfNovoIdCurso;
+	private JComboBox<String> cbNovoIdCurso;
 	private JTextField tfNovoDiaSemana;
 	private JTextField tfNovoHoraInicial;
 	private JTextField tfNovoHorasDiarias;
-	private JTextField tfDeletarId;
-	private JTextField tfBuscar;
+	private JComboBox<String> cbDeletarId;
+	private JComboBox<String> cbBuscar;
 	private JTable tableConsultar;
 	/**
 	 * Launch the application.
@@ -117,12 +118,6 @@ public class TelaDisciplina extends JFrame {
 		tabCadastroDisciplina.add(tfCadastrarID);
 		tfCadastrarID.setColumns(10);
 		
-		tfCadastrarIdCurso = new JTextField();
-		tfCadastrarIdCurso.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfCadastrarIdCurso.setBounds(30, 196, 292, 31);
-		tabCadastroDisciplina.add(tfCadastrarIdCurso);
-		tfCadastrarIdCurso.setColumns(10);
-		
 		tfCadastroDiaSemana = new JTextField();
 		tfCadastroDiaSemana.setFont(new Font("Dialog", Font.PLAIN, 14));
 		tfCadastroDiaSemana.setColumns(10);
@@ -140,6 +135,12 @@ public class TelaDisciplina extends JFrame {
 		tfCadastrarHorasDiarias.setColumns(10);
 		tfCadastrarHorasDiarias.setBounds(409, 196, 292, 33);
 		tabCadastroDisciplina.add(tfCadastrarHorasDiarias);
+		
+		//ComboBox
+		cbCadastroCurso = new JComboBox<>();
+		cbCadastroCurso.setBounds(30, 196, 292, 31);
+		tabCadastroDisciplina.add(cbCadastroCurso);
+		cbCadastroCurso.setEditable(true);
 		
 		//Buttons
 		JButton btnCadastrar = new JButton("Cadastrar");
@@ -196,24 +197,12 @@ public class TelaDisciplina extends JFrame {
 		lblAtualizarHorasDiarias.setBounds(356, 207, 264, 28);
 		tabAtualizarDisciplina.add(lblAtualizarHorasDiarias);
 		
-		//TextFields
-		tfAtualizarId = new JTextField();
-		tfAtualizarId.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfAtualizarId.setBounds(130, 12, 264, 28);
-		tabAtualizarDisciplina.add(tfAtualizarId);
-		tfAtualizarId.setColumns(10);
-		
+		//TextFields		
 		tfNovoNome = new JTextField();
 		tfNovoNome.setFont(new Font("Dialog", Font.PLAIN, 14));
 		tfNovoNome.setBounds(26, 90, 264, 28);
 		tabAtualizarDisciplina.add(tfNovoNome);
 		tfNovoNome.setColumns(10);
-				
-		tfNovoIdCurso = new JTextField();
-		tfNovoIdCurso.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfNovoIdCurso.setBounds(26, 168, 264, 28);
-		tabAtualizarDisciplina.add(tfNovoIdCurso);
-		tfNovoIdCurso.setColumns(10);
 		
 		tfNovoDiaSemana = new JTextField();
 		tfNovoDiaSemana.setFont(new Font("Dialog", Font.PLAIN, 14));
@@ -233,6 +222,17 @@ public class TelaDisciplina extends JFrame {
 		tfNovoHorasDiarias.setBounds(356, 246, 264, 28);
 		tabAtualizarDisciplina.add(tfNovoHorasDiarias);
 		
+		//ComboBox
+		cbAtualizarId = new JComboBox<String>();
+		cbAtualizarId.setEditable(true);
+		cbAtualizarId.setBounds(130, 12, 263, 31);
+		tabAtualizarDisciplina.add(cbAtualizarId);
+		
+		cbNovoIdCurso = new JComboBox<>();
+		cbNovoIdCurso.setBounds(26, 168, 264, 28);
+		tabAtualizarDisciplina.add(cbNovoIdCurso);
+		cbNovoIdCurso.setEditable(true);
+		
 		//Buttons
 		JButton btnAtualizar = new JButton("Atualizar");
 		btnAtualizar.setFont(new Font("Dialog", Font.BOLD, 14));
@@ -247,7 +247,7 @@ public class TelaDisciplina extends JFrame {
 		
 		JButton btnVoltar2 = new JButton("Voltar");
 		btnVoltar2.setFont(new Font("Dialog", Font.BOLD, 14));
-		btnVoltar2.setBounds(578, 359, 120, 33);
+		btnVoltar2.setBounds(622, 359, 120, 33);
 		tabAtualizarDisciplina.add(btnVoltar2);
 		
 		//TextArea
@@ -269,12 +269,11 @@ public class TelaDisciplina extends JFrame {
 		lblBuscar.setBounds(12, 11, 168, 23);
 		tabConsultarDisciplina.add(lblBuscar);
 		
-		//TextField
-		tfBuscar = new JTextField();
-		tfBuscar.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfBuscar.setBounds(139, 10, 203, 25);
-		tabConsultarDisciplina.add(tfBuscar);
-		tfBuscar.setColumns(10);
+		//ComboBox		
+		cbBuscar = new JComboBox<String>();
+		cbBuscar.setEditable(true);
+		cbBuscar.setBounds(139, 10, 203, 25);
+		tabConsultarDisciplina.add(cbBuscar);
 		
 		//Buttons
 		JButton btnListar = new JButton("Listar");
@@ -284,7 +283,7 @@ public class TelaDisciplina extends JFrame {
 		
 		JButton btnVoltar3 = new JButton("Voltar");
 		btnVoltar3.setFont(new Font("Dialog", Font.BOLD, 14));
-		btnVoltar3.setBounds(634, 357, 120, 33);
+		btnVoltar3.setBounds(622, 359, 120, 33);
 		tabConsultarDisciplina.add(btnVoltar3);
 		
 		JButton btnBuscar = new JButton("Buscar");
@@ -310,12 +309,11 @@ public class TelaDisciplina extends JFrame {
 		lblDeletarId.setBounds(24, 59, 486, 30);
 		tabDeleteDisciplina.add(lblDeletarId);
 		
-		//TextField
-		tfDeletarId = new JTextField();
-		tfDeletarId.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tfDeletarId.setBounds(24, 89, 305, 30);
-		tabDeleteDisciplina.add(tfDeletarId);
-		tfDeletarId.setColumns(10);
+		//ComboBox
+		cbDeletarId = new JComboBox<String>();
+		cbDeletarId.setEditable(true);
+		cbDeletarId.setBounds(24, 89, 305, 30);
+		tabDeleteDisciplina.add(cbDeletarId);
 		
 		//Buttons
 		JButton btnDeletar = new JButton("Deletar");
@@ -325,7 +323,7 @@ public class TelaDisciplina extends JFrame {
 		
 		JButton btnVoltar4 = new JButton("Voltar");
 		btnVoltar4.setFont(new Font("Dialog", Font.BOLD, 14));
-		btnVoltar4.setBounds(629, 359, 120, 33);
+		btnVoltar4.setBounds(622, 359, 120, 33);
 		tabDeleteDisciplina.add(btnVoltar4);
 		
 		JButton btnPesquisarD = new JButton("Pesquisar");
@@ -344,9 +342,9 @@ public class TelaDisciplina extends JFrame {
 		/*
 		 * Ações
 		 */
-		DisciplinaController dc = new DisciplinaController(tfCadastrarNome, tfCadastrarID, tfCadastrarIdCurso, tfCadastroDiaSemana,
-				tfCadastrarHoraInicial, tfCadastrarHorasDiarias, taResultadoCadastrar, tfAtualizarId, tfNovoNome, tfNovoIdCurso, tfNovoDiaSemana,
-				tfNovoHoraInicial, tfNovoHorasDiarias, taResultadoAtualizar, tfDeletarId,taResultadoDeletar, tfBuscar, tableConsultar);
+		DisciplinaController dc = new DisciplinaController(tfCadastrarNome, tfCadastrarID, cbCadastroCurso, tfCadastroDiaSemana,
+				tfCadastrarHoraInicial, tfCadastrarHorasDiarias, taResultadoCadastrar, cbAtualizarId, tfNovoNome, cbNovoIdCurso, tfNovoDiaSemana,
+				tfNovoHoraInicial, tfNovoHorasDiarias, taResultadoAtualizar, cbDeletarId,taResultadoDeletar, cbBuscar, tableConsultar);
 		
 		btnCadastrar.addActionListener(dc);
 		btnAtualizar.addActionListener(dc);

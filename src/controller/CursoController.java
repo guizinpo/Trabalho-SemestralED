@@ -14,7 +14,7 @@ import br.edu.fateczl.listaSimples.Lista;
 
 public class CursoController implements ActionListener {
 
-	private static final String CAMINHO = "src/resources/cursos.csv";
+	private static final String CAMINHO = "resources/cursos.csv";
 	
 	//Cadastrar
 	private JTextField tfCadastrarID;
@@ -36,6 +36,10 @@ public class CursoController implements ActionListener {
 	private JTextField tfNomeDesejavel2;
 	private JTextArea taResultadoDeletar;
 
+	public CursoController() {
+		super();
+	}
+	
 	public CursoController(JTextField tfCadastrarID, JTextField tfCadastrarNome, JTextField tfCadastrarArea,
 			JTextArea taResultadoCadastrar, JTextField tfNomeDesejavel, JTextField tfNovoNome, JTextField tfNovaArea,
 			JTextArea taResultadoAtualizar, JTextField tfBuscar, JTable tableConsultar,
@@ -112,9 +116,9 @@ public class CursoController implements ActionListener {
 					Curso c = new Curso();
 					String[] info = line.split(";");
 
-					c.id = info[0];
-					c.nome = info[1];
-					c.area = info[2];
+					c.setId(info[0]);
+					c.setNome(info[1]);
+					c.setArea(info[2]);
 
 					todos.addLast(c);
 				} else {
@@ -140,9 +144,9 @@ public class CursoController implements ActionListener {
 	    
 	    Curso curso = new Curso();
 	    
-	    curso.id = id;
-	    curso.nome = nome;
-	    curso.area = area;
+	    curso.setId(id);
+	    curso.setNome(nome);
+	    curso.setArea(area);
 	    
 	    Lista<String> arquivo = arquivoUtil.lerArquivo(CAMINHO);
 
@@ -160,11 +164,11 @@ public class CursoController implements ActionListener {
 	            	String idArquivo = dados[0].trim();
 	            	String nomeArquivo = dados[1].trim();
 
-	                if (curso.id.equalsIgnoreCase(idArquivo)) {
+	                if (curso.getId().equalsIgnoreCase(idArquivo)) {
 	                    idExiste = true;
 	                }
 
-	                if (curso.nome.equalsIgnoreCase(nomeArquivo)) {
+	                if (curso.getNome().equalsIgnoreCase(nomeArquivo)) {
 	                    nomeExiste = true;
 	                }
 	            }
@@ -197,7 +201,7 @@ public class CursoController implements ActionListener {
 		for (int i = 0; i < cursos.size(); i++) {
 			Curso c = cursos.get(i);
 			
-			if(!c.nome.trim().equalsIgnoreCase(nome.trim())) {
+			if(!c.getNome().trim().equalsIgnoreCase(nome.trim())) {
 			    addLines.add(c.toString(), addLines.size());
 			} else {
 	            encontrado = true;
@@ -236,9 +240,9 @@ public class CursoController implements ActionListener {
 		for(int i = 0; i < cursos.size(); i++) {
 			Curso c = cursos.get(i);
 			
-			if(c.nome.trim().equalsIgnoreCase(nome.trim())) {
-				c.nome = novoNome;
-				c.area = novaArea;
+			if(c.getNome().trim().equalsIgnoreCase(nome.trim())) {
+				c.setNome(novoNome);
+				c.setArea(novaArea);;
 			    encontrado = true;
 			}
 			addLines.add(c.toString(), addLines.size());
@@ -262,9 +266,9 @@ public class CursoController implements ActionListener {
 
 	    for (int i = 0; i < cursos.size(); i++) {
 	        Curso c = cursos.get(i);
-	        dados[i][0] = c.id;
-	        dados[i][1] = c.nome;
-	        dados[i][2] = c.area;
+	        dados[i][0] = c.getId();
+	        dados[i][1] = c.getNome();
+	        dados[i][2] = c.getArea();
 	    }
 
 	    tableConsultar.setModel(
@@ -283,7 +287,7 @@ public class CursoController implements ActionListener {
 	    for (int i = 0; i < cursos.size(); i++) {
 	        Curso c = cursos.get(i);
 	        
-	        if (c.nome.trim().equalsIgnoreCase(buscar)) {
+	        if (c.getNome().trim().equalsIgnoreCase(buscar)) {
 	        	res.addLast(c);
 	        }
 	    }

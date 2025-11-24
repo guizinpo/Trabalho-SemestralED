@@ -6,9 +6,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
 import model.Disciplina;
 import model.Inscricao;
+import model.Curso;
 import util.arquivoUtil;
 import br.edu.fateczl.listaSimples.Lista;
 import br.edu.fateczl.fila.Fila;
@@ -20,63 +22,65 @@ public class DisciplinaController implements ActionListener{
     //Cadastrar
     private JTextField tfCadastrarNome;
 	private JTextField tfCadastrarID;
-	private JTextField tfCadastrarIdCurso;
+	//private JTextField tfCadastrarIdCurso;
 	private JTextField tfCadastroDiaSemana;
 	private JTextField tfCadastrarHoraInicial;
 	private JTextField tfCadastrarHorasDiarias;
 	private JTextArea taResultadoCadastrar;
+	private JComboBox<String> cbCadastroCurso;
 	
 	//Atualizar
-	private JTextField tfAtualizarId;
+	private JComboBox<String> cbAtualizarId;
+	private JComboBox<String> cbNovoIdCurso;
 	private JTextField tfNovoNome;
-	private JTextField tfNovoIdCurso;
 	private JTextField tfNovoDiaSemana;
 	private JTextField tfNovoHoraInicial;
 	private JTextField tfNovoHorasDiarias;
 	private JTextArea taResultadoAtualizar;
 	
 	//Pesquisar
-	private JTextField tfBuscar;
+	private JComboBox<String> cbBuscar;
 	private JTable tableConsultar;
 	
 	//Deletar
-	private JTextField tfDeletarId;
+	private JComboBox<String> cbDeletarId;
 	private JTextArea taResultadoDeletar;
 
 	public DisciplinaController() {
 		super();
 	}
 	
-    public DisciplinaController(JTextField tfCadastrarNome, JTextField tfCadastrarID, JTextField tfCadastrarIdCurso,
+    public DisciplinaController(JTextField tfCadastrarNome, JTextField tfCadastrarID, JComboBox<String> cbCadastroCurso,
     		JTextField tfCadastroDiaSemana, JTextField tfCadastrarHoraInicial, JTextField tfCadastrarHorasDiarias,
-    		JTextArea taResultadoCadastrar, JTextField tfAtualizarId, JTextField tfNovoNome, JTextField tfNovoIdCurso,
+    		JTextArea taResultadoCadastrar, JComboBox<String> cbAtualizarId, JTextField tfNovoNome, JComboBox<String> cbNovoIdCurso,
     		JTextField tfNovoDiaSemana, JTextField tfNovoHoraInicial, JTextField tfNovoHorasDiarias, JTextArea taResultadoAtualizar,
-    		JTextField tfDeletarId, JTextArea taResultadoDeletar, JTextField tfBuscar, JTable tableConsultar){
+    		JComboBox<String> cbDeletarId, JTextArea taResultadoDeletar, JComboBox<String> cbBuscar, JTable tableConsultar){
         
         this.tfCadastrarNome = tfCadastrarNome;
         this.tfCadastrarID = tfCadastrarID;
-        this.tfCadastrarIdCurso = tfCadastrarIdCurso;
+        this.cbCadastroCurso = cbCadastroCurso;
         this.tfCadastroDiaSemana = tfCadastroDiaSemana;
         this.tfCadastrarHoraInicial = tfCadastrarHoraInicial;
         this.tfCadastrarHorasDiarias = tfCadastrarHorasDiarias;
         this.taResultadoCadastrar = taResultadoCadastrar;
         
-        this.tfAtualizarId = tfAtualizarId;
+        this.cbAtualizarId = cbAtualizarId;
         this.tfNovoNome = tfNovoNome;
-        this.tfNovoIdCurso = tfNovoIdCurso;
+        this.cbNovoIdCurso = cbNovoIdCurso;
         this.tfNovoDiaSemana = tfNovoDiaSemana;
         this.tfNovoHoraInicial = tfNovoHoraInicial;
         this.tfNovoHorasDiarias = tfNovoHorasDiarias;
         this.taResultadoAtualizar = taResultadoAtualizar;
         
-        this.tfBuscar = tfBuscar;
+        this.cbBuscar = cbBuscar;
         this.tableConsultar = tableConsultar;
         
-        this.tfDeletarId = tfDeletarId;
+        this.cbDeletarId = cbDeletarId;
         this.taResultadoDeletar = taResultadoDeletar;
         
         try {
-        	carregarDisciplinas();
+        	carregarCbCurso();
+        	carregarCbDisciplina();
         }catch(Exception e) {
         	e.printStackTrace();
         }
@@ -122,7 +126,7 @@ public class DisciplinaController implements ActionListener{
         String diaSemana = tfCadastroDiaSemana.getText().trim();
         String horaInicial = tfCadastrarHoraInicial.getText().trim();
         String horasDiarias = tfCadastrarHorasDiarias.getText().trim();
-        String idCurso = tfCadastrarIdCurso.getText().trim();
+        String idCurso = (String) cbCadastroCurso.getSelectedItem();
         
         if(id.isBlank() || nome.isBlank() || diaSemana.isBlank() || horaInicial.isBlank() || horasDiarias.isBlank() || idCurso.isBlank()) {
         	taResultadoCadastrar.setText("Todos os campos precisam estar preenchidos");
@@ -138,7 +142,7 @@ public class DisciplinaController implements ActionListener{
             	return;
         	}
         }
-        Disciplina disciplina = new Disciplina(id, nome, diaSemana, horaInicial, horasDiarias, idCurso);
+        Disciplina disciplina = new Disciplina(id, nome, diaSemana, horaInicial, horasDiarias, idCurso.trim());
         arquivoUtil.adicionarLinha(CAMINHODISCIPLINA, disciplina.toString());
         taResultadoCadastrar.setText("Adicionado com sucesso.");
     }
@@ -147,12 +151,12 @@ public class DisciplinaController implements ActionListener{
     	Lista<Disciplina> disciplinas = carregarDisciplinas();
     	Lista<Disciplina> linhas = new Lista<>();
     	boolean removido = false;
-    	String id = tfDeletarId.getText().trim();
+    	String id = (String) cbDeletarId.getSelectedItem();
     	int tamanho = disciplinas.size();
     	
     	for(int i = 0; i < tamanho; i++) {
     		Disciplina dis = disciplinas.get(i);
-    		if(!dis.getId().equals(id)) {
+    		if(!dis.getId().equals(id.trim())) {
     			linhas.addLast(dis);
     		}
     		else {
@@ -169,7 +173,7 @@ public class DisciplinaController implements ActionListener{
     		int insTamanho = inscricoes.size();
     		for(int i = 0; i< insTamanho; i++) {
     			Inscricao ins = inscricoes.get(i);
-    			if(ins.getIdDisciplina().equals(id)) {
+    			if(ins.getIdDisciplina().equals(id.trim())) {
     				ic.remover(ins.getCpfProfessor(), ins.getCodigoProcesso());
     			}
     		}
@@ -181,23 +185,23 @@ public class DisciplinaController implements ActionListener{
     	Lista<Disciplina> disciplinas = carregarDisciplinas();
     	Lista<Disciplina> linhas = new Lista<>();
     	boolean atualizado = false;
-    	String id = tfAtualizarId.getText().trim();
+    	String id = (String)cbAtualizarId.getSelectedItem();
         String nome = tfNovoNome.getText().trim();
         String diaSemana = tfNovoDiaSemana.getText().trim();
         String horaInicial = tfNovoHoraInicial.getText().trim();
         String horasDiarias = tfNovoHorasDiarias.getText().trim();
-        String idCurso = tfNovoIdCurso.getText().trim();
+        String idCurso = (String) cbNovoIdCurso.getSelectedItem();
         
         int tamanho = disciplinas.size();
 
     	for(int i = 0; i < tamanho; i++) {
     		Disciplina dis = disciplinas.get(i);
-    		if(dis.getId().equals(id)) {
+    		if(dis.getId().equals(id.trim())) {
     			if(!nome.isBlank()) {dis.setNome(nome);}
     			if(!diaSemana.isBlank()) {dis.setDiaSemana(diaSemana);}
     			if(!horaInicial.isBlank()) {dis.setHoraInicial(horaInicial);}
     			if(!horasDiarias.isBlank()) {dis.setHorasDiarias(horasDiarias);}
-    			if(!idCurso.isBlank()) {dis.setidCurso(idCurso);}
+    			if(!idCurso.isBlank()) {dis.setidCurso(idCurso.trim());}
     			atualizado = true;
     		}
     		linhas.addLast(dis);
@@ -212,13 +216,13 @@ public class DisciplinaController implements ActionListener{
     public Disciplina pesquisarDisciplina(String operacao) throws Exception{
         String id = "";
         if(operacao == "PesquisarA") {
-        	id = tfAtualizarId.getText().trim();
+        	id = (String) cbAtualizarId.getSelectedItem();
         }
         else if(operacao == "PesquisarD") {
-        	id = tfDeletarId.getText().trim();
+        	id = (String) cbDeletarId.getSelectedItem();
         }
         else if(operacao == "Buscar") {
-        	id = tfBuscar.getText().trim();
+        	id = (String) cbBuscar.getSelectedItem();
         }
         else {
         	id = operacao;
@@ -229,7 +233,7 @@ public class DisciplinaController implements ActionListener{
         
         for(int i = 0; i < tamanho; i++) {
         	Disciplina dis = disciplinas.get(i);
-    		if(dis.getId().equals(id)) {
+    		if(dis.getId().equals(id.trim())) {
     			return dis;
     		}
     	}
@@ -269,61 +273,66 @@ public class DisciplinaController implements ActionListener{
     	return fila;
     }
     
+    private void carregarCbDisciplina() throws Exception {
+    	Lista<Disciplina> disciplinas = carregarDisciplinas();
+    	
+    	int tamanho = disciplinas.size();
+    	cbAtualizarId.addItem("");
+    	cbBuscar.addItem("");
+    	cbDeletarId.addItem("");
+    	for(int i = 0; i < tamanho; i++) {
+    		Disciplina disciplina = disciplinas.get(i);
+    		cbAtualizarId.addItem(disciplina.getId());
+    		cbBuscar.addItem(disciplina.getId());
+    		cbDeletarId.addItem(disciplina.getId());
+    	}
+    }
+    
+    private void carregarCbCurso() throws Exception {
+    	CursoController cc = new CursoController();
+    	Lista<Curso> cursos = cc.listarCursos();
+    	
+    	int tamanho = cursos.size();
+    	cbCadastroCurso.addItem("");
+    	cbNovoIdCurso.addItem("");
+    	for(int i = 0; i < tamanho; i++) {
+    		Curso curso = cursos.get(i);
+    		cbCadastroCurso.addItem(curso.getId());
+    		cbNovoIdCurso.addItem(curso.getId());
+    	}
+    }
+ 
     @Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		
-		if(cmd.equals("Cadastrar")) {
-			try {
+		try {
+			if(cmd.equals("Cadastrar")) {
 				adicionarDisciplina();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			} 
-		}
-		if(cmd.equals("Atualizar")) {
-			try {
-				atualizarDisciplina();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+				carregarCbDisciplina(); 
 			}
-		}
-		if(cmd.equals("Listar")) {
-			try {
+			if(cmd.equals("Atualizar")) {
+				atualizarDisciplina();
+			}
+			if(cmd.equals("Listar")) {
 		        carregarDisciplinas();
 		        Fila<String> fila = carregarFila();
-		        
 		        carregarTabela(fila);
-		    } catch (Exception e1) {
-		        e1.printStackTrace();
-		    }
-		}
-		if(cmd.equals("Buscar")) {
-			try {
+			}
+			if(cmd.equals("Buscar")) {
 				mostrarDisciplina(cmd);
-			} catch (Exception e1) {
-				e1.printStackTrace();
 			}
-		}
-		if(cmd.equals("PesquisarA")) {
-			try {
+			if(cmd.equals("PesquisarA")) {
 				mostrarDisciplina(cmd);
-			} catch (Exception e1) {
-				e1.printStackTrace();
 			}
-		}
-		if(cmd.equals("PesquisarD")) {
-			try {
+			if(cmd.equals("PesquisarD")) {
 				mostrarDisciplina(cmd);
-			} catch (Exception e1) {
-				e1.printStackTrace();
 			}
-		}
-		if(cmd.equals("Deletar")) {
-			try {
-				removerDisciplina();;
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			if(cmd.equals("Deletar")) {
+				removerDisciplina();
+				carregarCbDisciplina();
 			}
+		}catch (Exception ex) {
+			ex.printStackTrace();
 		}
 		
 	}

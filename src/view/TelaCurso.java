@@ -90,7 +90,7 @@ public class TelaCurso extends JFrame {
 		
 		JButton btnVoltar = new JButton("Voltar");
 		btnVoltar.setFont(new Font("Dialog", Font.BOLD, 14));
-		btnVoltar.setBounds(491, 0, 120, 33);
+		btnVoltar.setBounds(470, 10, 120, 33);
 		tabCadastroCurso.add(btnVoltar);
 		
 		JPanel tabAtualizarCurso = new JPanel();
@@ -141,7 +141,7 @@ public class TelaCurso extends JFrame {
 		
 		JButton btnVoltar2 = new JButton("Voltar");
 		btnVoltar2.setFont(new Font("Dialog", Font.BOLD, 14));
-		btnVoltar2.setBounds(491, 0, 120, 33);
+		btnVoltar2.setBounds(470, 10, 120, 33);
 		tabAtualizarCurso.add(btnVoltar2);
 		
 		JPanel tabConsultarCurso = new JPanel();
@@ -160,7 +160,7 @@ public class TelaCurso extends JFrame {
 		
 		JButton btnVoltar3 = new JButton("Voltar");
 		btnVoltar3.setFont(new Font("Dialog", Font.BOLD, 14));
-		btnVoltar3.setBounds(491, 0, 120, 33);
+		btnVoltar3.setBounds(470, 10, 120, 33);
 		tabConsultarCurso.add(btnVoltar3);
 		
 		JLabel lblBuscar = new JLabel("Nome do Curso:");
@@ -209,7 +209,7 @@ public class TelaCurso extends JFrame {
 		
 		JButton btnVoltar4 = new JButton("Voltar");
 		btnVoltar4.setFont(new Font("Dialog", Font.BOLD, 14));
-		btnVoltar4.setBounds(491, 0, 120, 33);
+		btnVoltar4.setBounds(470, 10, 120, 33);
 		tabDeleteCurso.add(btnVoltar4);
 		
 		CursoController vCurso = new CursoController(tfCadastrarID, tfCadastrarNome, tfCadastrarArea, taResultadoCadastrar, tfNomeDesejavel, 
