@@ -153,23 +153,29 @@ public class ProcessoController implements ActionListener {
 	        String status = tfAtualizarStatus.getText().toLowerCase().trim();	       
 	        
 	        int tamanho = processos.size();
-
-	    	for(int i = 0; i < tamanho; i++) {
-	    		Processo proc = processos.get(i);
-	    		if(proc.getCodigoProcesso().equals(codigo.trim())) {
-	    			if(!status.isBlank()) {
-	    				if(status.equals("fechado") || status.equals("aberto")) {
-	    					proc.setStatus(status);
-		    				atualizado = true;
-	    				}
-	    				else {
-	    					taResultadoAtualizar.setText("O status do processo tem quer 'aberto' ou 'fechado'.");
-	    				}
-	    			}	
-	    		}
-	    		linhas.addLast(proc);
-	    		
-	    	} 
+	        if(!codigo.isBlank()){
+		    	for(int i = 0; i < tamanho; i++) {
+		    		Processo proc = processos.get(i);
+		    		if(proc.getCodigoProcesso().equals(codigo.trim())) {
+		    			if(!status.isBlank()) {
+		    				if(status.equals("fechado") || status.equals("aberto")) {
+		    					proc.setStatus(status);
+			    				atualizado = true;
+		    				}
+		    				else {
+		    					taResultadoAtualizar.setText("O status do processo tem que ser 'aberto' ou 'fechado'.");
+		    				}
+		    			}
+		    			else {
+	    					taResultadoAtualizar.setText("O status do processo tem que estar preechido com 'aberto' ou 'fechado'.");
+		    			}
+		    		}
+		    		linhas.addLast(proc);	
+		    	}
+	 		}
+	        else {
+	        	taResultadoAtualizar.setText("Por favor escolha o código do processo.");
+	    	}
 	    	if(atualizado) {
 	    		taResultadoAtualizar.setText("Processo atualizado.");
 	    		salvarProcessos(linhas);

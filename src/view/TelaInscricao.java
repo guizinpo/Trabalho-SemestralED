@@ -75,7 +75,7 @@ public class TelaInscricao extends JFrame {
         tabCadastrar.add(lblProcesso);
         
         cbCodigoProcesso = new JComboBox<>();
-        cbCodigoProcesso.setBounds(30, 115, 250, 25);
+        cbCodigoProcesso.setBounds(30, 175, 250, 25);
 		tabCadastrar.add(cbCodigoProcesso);
 		cbCodigoProcesso.setEditable(true);
 
