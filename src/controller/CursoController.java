@@ -6,6 +6,7 @@ import model.Curso;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -23,17 +24,17 @@ public class CursoController implements ActionListener {
 	private JTextArea taResultadoCadastrar;
 	
 	//Atualizar
-	private JTextField tfNomeDesejavel;
+	private JComboBox<String> cbNomeDesejavel;
 	private JTextField tfNovoNome;
 	private JTextField tfNovaArea;
 	private JTextArea taResultadoAtualizar;
 	
 	//Consultar
-	private JTextField tfBuscar;
+	private JComboBox<String> cbBuscar;
 	private JTable tableConsultar;
 	
 	//Deletar
-	private JTextField tfNomeDesejavel2;
+	private JComboBox<String> cbNomeDesejavel2;
 	private JTextArea taResultadoDeletar;
 
 	public CursoController() {
@@ -41,64 +42,54 @@ public class CursoController implements ActionListener {
 	}
 	
 	public CursoController(JTextField tfCadastrarID, JTextField tfCadastrarNome, JTextField tfCadastrarArea,
-			JTextArea taResultadoCadastrar, JTextField tfNomeDesejavel, JTextField tfNovoNome, JTextField tfNovaArea,
-			JTextArea taResultadoAtualizar, JTextField tfBuscar, JTable tableConsultar,
-			JTextField tfNomeDesejavel2, JTextArea taResultadoDeletar) {
+			JTextArea taResultadoCadastrar, JComboBox<String> cbNomeDesejavel, JTextField tfNovoNome, JTextField tfNovaArea,
+			JTextArea taResultadoAtualizar, JComboBox<String> cbBuscar, JTable tableConsultar,
+			JComboBox<String> cbNomeDesejavel2, JTextArea taResultadoDeletar) {
 		super();
 		this.tfCadastrarID = tfCadastrarID;
 		this.tfCadastrarNome = tfCadastrarNome;
 		this.tfCadastrarArea = tfCadastrarArea;
 		this.taResultadoCadastrar = taResultadoCadastrar;
-		this.tfNomeDesejavel = tfNomeDesejavel;
+		this.cbNomeDesejavel = cbNomeDesejavel;
 		this.tfNovoNome = tfNovoNome;
 		this.tfNovaArea = tfNovaArea;
 		this.taResultadoAtualizar = taResultadoAtualizar;
-		this.tfBuscar = tfBuscar;
+		this.cbBuscar = cbBuscar;
 		this.tableConsultar = tableConsultar;
-		this.tfNomeDesejavel2 = tfNomeDesejavel2;
+		this.cbNomeDesejavel2 = cbNomeDesejavel2;
 		this.taResultadoDeletar = taResultadoDeletar;
+		
+		try {
+			carregarCbCurso();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		
-		if(cmd.equals("Cadastrar")) {
-			try {
+		try {
+			if(cmd.equals("Cadastrar")) {
 				inserirCurso();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			} 
-		}
-		if(cmd.equals("Atualizar")) {
-			try {
+				carregarCbCurso();
+			}
+			if(cmd.equals("Atualizar")) {
 				atualizarCurso();
-			} catch (Exception e1) {
-				e1.printStackTrace();
 			}
-		}
-		if(cmd.equals("Listar")) {
-			try {
-		        Lista<Curso> lista = listarCursos();
-		        
+			if(cmd.equals("Listar")) {
+		        Lista<Curso> lista = listarCursos();    
 		        atualizarTabela(lista);
-		    } catch (Exception e1) {
-		        e1.printStackTrace();
-		    }
-		}
-		if(cmd.equals("Buscar")) {
-			try {
+			}
+			if(cmd.equals("Buscar")) {
 				buscarCurso();
-			} catch (Exception e1) {
-				e1.printStackTrace();
 			}
-		}
-		if(cmd.equals("Deletar")) {
-			try {
+			if(cmd.equals("Deletar")) {
 				removerCurso();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+				carregarCbCurso();
 			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
 		}
 		
 	}
@@ -191,7 +182,7 @@ public class CursoController implements ActionListener {
 	// Este metodo é somente para remoção de um curso indesejado.
 	public void removerCurso() throws Exception {
 
-		String nome = tfNomeDesejavel2.getText().trim();
+		String nome = (String) cbNomeDesejavel2.getSelectedItem();
 		
 		Lista<Curso> cursos = listarCursos();
 		Lista<String> addLines = new Lista<>();
@@ -221,7 +212,7 @@ public class CursoController implements ActionListener {
 	// Este metodo faz a atualização de uma informação do curso.
 	public void atualizarCurso() throws Exception {
 
-		String nome = tfNomeDesejavel.getText().trim();
+		String nome = (String) cbNomeDesejavel.getSelectedItem();
 		
 		String novoNome = tfNovoNome.getText().trim();
 		String novaArea = tfNovaArea.getText().trim();
@@ -279,7 +270,7 @@ public class CursoController implements ActionListener {
 	// Este metodo faz a procura de um curso especifico por nome.
 	public void buscarCurso() throws Exception {
 		
-		String buscar = tfBuscar.getText().trim();
+		String buscar = (String) cbBuscar.getSelectedItem();
 
 	    Lista<Curso> cursos = listarCursos();
 	    Lista<Curso> res = new Lista<>();
@@ -295,5 +286,20 @@ public class CursoController implements ActionListener {
 	    atualizarTabela(res);
 
 	}
+	
+	private void carregarCbCurso() throws Exception {
+    	Lista<Curso> cursos = listarCursos();
+    	
+    	int tamanho = cursos.size();
+    	cbBuscar.addItem("");
+    	cbNomeDesejavel.addItem("");
+    	cbNomeDesejavel2.addItem("");
+    	for(int i = 0; i < tamanho; i++) {
+    		Curso curso = cursos.get(i);
+    		cbBuscar.addItem(curso.getNome());
+        	cbNomeDesejavel.addItem(curso.getNome());
+        	cbNomeDesejavel2.addItem(curso.getNome());
+    	}
+    }
 
 }

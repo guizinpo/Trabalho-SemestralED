@@ -7,7 +7,6 @@ import java.io.IOException;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 import br.edu.fateczl.listaSimples.Lista;
 import br.edu.fateczl.quick.quick;
@@ -22,7 +21,7 @@ public class InscricaoController implements ActionListener {
 
     private static final String CAMINHO = "resources/inscricoes.csv";
 
-    private JTextField tfCpfCadastrar;
+    private JComboBox<String> cbCpfCadastrar;
     private JComboBox<String> cbIdDisciplinaCadastrar;
     private JComboBox<String> cbCodigoProcessoCadastrar;
     private JTextArea taCadastrar;
@@ -45,7 +44,7 @@ public class InscricaoController implements ActionListener {
     }
 
     public InscricaoController(
-            JTextField tfCpfCadastrar,
+    		JComboBox<String> cbCpfCadastrar,
             JComboBox<String> cbIdDisciplinaCadastrar,
             JComboBox<String> cbCodigoProcessoCadastrar,
             JTextArea taCadastrar,
@@ -62,7 +61,7 @@ public class InscricaoController implements ActionListener {
             JTextArea taDeletar
     ) {
 
-        this.tfCpfCadastrar = tfCpfCadastrar;
+        this.cbCpfCadastrar = cbCpfCadastrar;
         this.cbIdDisciplinaCadastrar = cbIdDisciplinaCadastrar;
         this.cbCodigoProcessoCadastrar = cbCodigoProcessoCadastrar;
         this.taCadastrar = taCadastrar;
@@ -82,6 +81,7 @@ public class InscricaoController implements ActionListener {
         	carregarCbDisciplina();
         	carregarCbInscricao();
         	carregarCbProcesso();
+        	carregarCbProfessor();
         }catch(Exception e) {
         	e.printStackTrace();
         }
@@ -118,7 +118,7 @@ public class InscricaoController implements ActionListener {
     }
 
     private void cadastrarInscricao() throws Exception {
-        String cpf = tfCpfCadastrar.getText().trim();
+        String cpf = (String) cbCpfCadastrar.getSelectedItem();
         String disciplina = (String) cbIdDisciplinaCadastrar.getSelectedItem();
         String processo = (String) cbCodigoProcessoCadastrar.getSelectedItem();
 
@@ -127,13 +127,13 @@ public class InscricaoController implements ActionListener {
             return;
         }
 
-        Professor p = professorController.buscarPorCPF(cpf);
+        Professor p = professorController.buscarPorCPF(cpf.trim());
         if (p == null) {
             taCadastrar.setText("Professor não encontrado no sistema.");
             return;
         }
 
-        Inscricao ins = new Inscricao(cpf, disciplina.trim(), processo.trim());
+        Inscricao ins = new Inscricao(cpf.trim(), disciplina.trim(), processo.trim());
         arquivoUtil.adicionarLinha(CAMINHO, ins.toString());
 
         taCadastrar.setText("Inscrição cadastrada com sucesso!");
@@ -355,11 +355,23 @@ public class InscricaoController implements ActionListener {
     	int tamanho = inscricoes.size();
     	cbCpfAtualizar.addItem("");
     	cbCpfDeletar.addItem("");
-    	
     	for(int i = 0; i < tamanho; i++) {
     		Inscricao inscricao = inscricoes.get(i);
     		cbCpfAtualizar.addItem(inscricao.getCpfProfessor());
     		cbCpfDeletar.addItem(inscricao.getCpfProfessor());
+    	}
+    }
+    
+    private void carregarCbProfessor() throws Exception{
+    	ProfessorController pc = new ProfessorController();
+    	Lista<Professor> professores = pc.listar();
+    	
+    	int tamanho = professores.size();
+    	cbCpfCadastrar.addItem("");
+    	
+    	for(int i = 0; i < tamanho; i++) {
+    		Professor professor = professores.get(i);
+    		cbCpfCadastrar.addItem(professor.getCpf());
     	}
     }
 }
